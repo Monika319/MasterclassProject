@@ -4,6 +4,8 @@
  */
 //package histo;
 
+import com.visutools.nav.bislider.BiSlider;
+
 /**
  *
  * @author rafal
@@ -132,5 +134,6 @@ public class NewJFrame1 extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JTabbedPane jTabbedPane5;
     private javax.swing.JTabbedPane jTabbedPane6;
+
     // End of variables declaration//GEN-END:variables
 }

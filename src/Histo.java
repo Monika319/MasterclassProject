@@ -1,5 +1,6 @@
 
 
+import com.visutools.nav.bislider.BiSlider;
 import hep.aida.IFitResult;
 import hep.aida.IFunction;
 import jhplot.*;
@@ -42,6 +43,7 @@ public class Histo extends JFrame implements ActionListener {
     private JMenuItem jMenuItem3;
     private JPanel load_histo_panel;
     private JPanel fit_panel;
+    private BiSlider bislider;
     private JInternalFrame jInternalFrame1;
     //  private JTabbedPane jTabbedPane1;
     //private JTabbedPane jTabbedPane2;
@@ -114,6 +116,9 @@ public class Histo extends JFrame implements ActionListener {
         jMenuItem3 = new JMenuItem();
         jMenuItem2 = new JMenuItem();
         jMenu2 = new JMenu();
+        bislider=new BiSlider();
+
+
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
@@ -220,6 +225,7 @@ public class Histo extends JFrame implements ActionListener {
 
         fit_panel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
 
+
         GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
         fit_panel.setLayout(fit_panelLayout);
         fit_panelLayout.setHorizontalGroup(
@@ -230,6 +236,14 @@ public class Histo extends JFrame implements ActionListener {
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGap(0, 217, Short.MAX_VALUE)
         );
+
+
+        bislider.setDefaultColor(Color.blue);
+        bislider.setVisible(true);
+        fit_panel.add(bislider);
+
+
+
 
         javax.swing.GroupLayout jLayeredPane2Layout = new GroupLayout(jLayeredPane2);
         jLayeredPane2.setLayout(jLayeredPane2Layout);
@@ -416,7 +430,7 @@ public class Histo extends JFrame implements ActionListener {
                     plot_hist(1.0D, 2.0D, "PbPb-AntiLambda.txt", 800);
                 }
                 else if (s == "PbPb-0-10%"){
-                    plot_hist(1.0D, 2.0D, "dataset31.txt", 1100);
+                    plot_hist(1.0D, 2.0D, "dataset31.txt", 1150);
                 }
                 else if (s == "PbPb-10-20%"){
                     plot_hist(1.0D, 2.0D, "dataset32.txt", 1100);
@@ -510,6 +524,7 @@ public class Histo extends JFrame implements ActionListener {
         }
 
         h1 = list_data.getH1D(400, xminrange, xmaxrange);
+
         // H1D h1 = new H1D("Histogram", 100, minx, maxx);
 
         // Random r = new Random();
