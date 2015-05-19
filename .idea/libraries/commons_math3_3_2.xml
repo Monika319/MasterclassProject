@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="commons-math3-3.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/commons-math3-3.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/exp4j.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-graphics2d-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-rootio-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-util-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-jminuit-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-jaida-jminuit-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/jscl-math.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/freehep-jaida-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/openide-lookup-1.9-patched-1.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/org-openide-util-lookup.jar!/" />
+      <root url="file://$USER_HOME$/Downloads/commons-math3-3.5" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$USER_HOME$/Downloads/commons-math3-3.5/docs/apidocs" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Downloads/org-openide-util-lookup-7.3-sources.jar!/" />
+    </SOURCES>
+    <jarDirectory url="file://$USER_HOME$/Downloads/commons-math3-3.5" recursive="false" />
+  </library>
+</component>

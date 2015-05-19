@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="dependencies">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Desktop/dependencies/aida-3.5.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/dependencies/colt.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/dependencies/jhplot.jar!/" />
+      <root url="jar://$USER_HOME$/Desktop/dependencies/jhplot_utils.jar!/" />
+      <root url="file://$USER_HOME$/Desktop/dependencies" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+    <jarDirectory url="file://$USER_HOME$/Desktop/dependencies" recursive="false" />
+  </library>
+</component>

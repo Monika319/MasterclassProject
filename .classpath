@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/aida-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-graphics2d-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-jaida-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-jaida-jminuit-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-jminuit-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-rootio-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/freehep-util-3.5.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/jhplot.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/jhplot_utils.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Rafał/Downloads/jscl-math.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
