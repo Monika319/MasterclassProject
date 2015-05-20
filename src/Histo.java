@@ -44,6 +44,7 @@ public class Histo extends JFrame implements ActionListener {
     private JPanel load_histo_panel;
     private JPanel fit_panel;
     private BiSlider bislider;
+    private BiSlider bislider1;
     private JInternalFrame jInternalFrame1;
     //  private JTabbedPane jTabbedPane1;
     //private JTabbedPane jTabbedPane2;
@@ -117,6 +118,7 @@ public class Histo extends JFrame implements ActionListener {
         jMenuItem2 = new JMenuItem();
         jMenu2 = new JMenu();
         bislider=new BiSlider();
+        bislider1=new BiSlider();
 
 
 
@@ -225,22 +227,43 @@ public class Histo extends JFrame implements ActionListener {
 
         fit_panel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
 
-
+        bislider.setDefaultColor(Color.blue);
+        bislider.setVisible(true);
+        bislider1.setDefaultColor(Color.blue);
+        bislider1.setVisible(true);
         GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
         fit_panel.setLayout(fit_panelLayout);
         fit_panelLayout.setHorizontalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(bislider)
+                                .addComponent(bislider1))
+                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
+
+
+
+//                        .addGroup(fit_panelLayout.createSequentialGroup()
+//                                .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                .addGap(18, 18, 18)
+//                                .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                .addGap(18, 18,18))
+
         );
         fit_panelLayout.setVerticalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 217, Short.MAX_VALUE)
+                        .addGroup(fit_panelLayout.createSequentialGroup()
+                                .addGap(30, 30,30)
+                                .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30,30)
+                                .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(30, 30, 30))
+                //mozna dac do gapow wieksze liczby i wtedy sie rozciagnie cale okno
+
         );
 
 
-        bislider.setDefaultColor(Color.blue);
-        bislider.setVisible(true);
-        fit_panel.add(bislider);
+
+
 
 
 
