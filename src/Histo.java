@@ -64,14 +64,14 @@ public class Histo extends JFrame implements ActionListener {
     private String name;
     private double wartosc;
     private static HPlot c1;
-    private HFitter polynomialfitter;
-    private HFitter functionFitter;
-    private F1D fFitGaus;
-    private F1D fFitPolynomial;
-    private int TotalFit;
-    private int signalFit;
-    private int BckFit;
-    private double[] Pars;
+    private static HFitter polynomialfitter;
+    private static HFitter functionFitter;
+    private static F1D fFitGaus;
+    private static F1D fFitPolynomial;
+    private static int TotalFit;
+    private static int signalFit;
+    private static int BckFit;
+    private static double[] Pars;
     static H1D h1;
     // private JLayeredPane jLayeredPane1;
     private JTabbedPane jTabbedPane6;
@@ -79,8 +79,8 @@ public class Histo extends JFrame implements ActionListener {
     private JCheckBox[] boxes2;
     public static double minGaussRange;
     public static double maxGaussRange;
-    public double minPolyRange;
-    public double maxPolyRange;
+    public static double minPolyRange;
+    public static double maxPolyRange;
     public Listeners listeners;
     public static DecimalFormat decimalFormat;
     private JButton fitButton;
@@ -129,6 +129,8 @@ public class Histo extends JFrame implements ActionListener {
         jMenu2 = new JMenu();
         bislider = new BiSlider();
         bislider1 = new BiSlider();
+        bislider.setName("gaussSlider");
+        bislider1.setName("bcgSlider");
         listeners = new Listeners();
         decimalFormat = new DecimalFormat("#.###");
         fitButton = new JButton("Fit signal+background");
@@ -244,7 +246,9 @@ public class Histo extends JFrame implements ActionListener {
         bislider.setDecimalFormater(new DecimalFormat("#.###"));
         bislider.setVisible(true);
 
+        // bislider.addBiSliderListener(listeners.sliderListener);
         bislider.addBiSliderListener(listeners.sliderListener);
+        fitButton.addActionListener(listeners.fitListener);
 
 
         bislider1.setMinimumColor(Color.blue);
@@ -375,7 +379,7 @@ public class Histo extends JFrame implements ActionListener {
                     plot_hist(0.0D, 1.0D, "PbPb-K0.txt", 1450);
                 } else if (s == "PbPb-0-10%") {
                     plot_hist(0.0D, 1.0D, "dataset11.txt", 2600);
-                    FunctionFitter(minGaussRange, maxGaussRange, 0.3, 1D);
+                    //  FunctionFitter(minGaussRange, maxGaussRange, 0.3, 1D);
 
                     // FunctionFitter(0.487, 0.508, 0.3, 1D);
                 } else if (s == "PbPb-10-20%") {
@@ -579,10 +583,17 @@ public class Histo extends JFrame implements ActionListener {
 
     }
 
+    static void FunctionFitter(double minGaus, double maxGaus, double minPoly,
+                               double maxPoly) {
 
-    void FunctionFitter(double minGaus, double maxGaus, double minPoly,
-                        double maxPoly) {
-        this.c1.clearLabels();// clearing data from histogram and plotting data from fit
+//        if (fFitGaus!=null){
+//            c1.d
+//        }
+        if (fFitGaus!=null){
+        c1.clearAllData();
+            c1.draw(h1);
+        System.out.println("gausslinestyle :"+c1.getData().toString());}
+        c1.clearLabels();// clearing data from histogram and plotting data from fit
         polynomialfitter = new HFitter();
         functionFitter = new HFitter();
 
@@ -623,7 +634,7 @@ public class Histo extends JFrame implements ActionListener {
         fFitPolynomial.setColor(Color.blue);
         fFitPolynomial.setPenWidth(3);
 
-        BckFit = (int) (BackgroundIntegral(minGaus, maxGaus) / (this.h1.binLowerEdge(1) - this.h1.binLowerEdge(0)));
+        BckFit = (int) (BackgroundIntegral(minGaus, maxGaus) / (h1.binLowerEdge(1) - h1.binLowerEdge(0)));
         System.out.println("BckFit: " + Integer.toString(BckFit));
 
         c1.draw(fFitPolynomial);
@@ -631,7 +642,7 @@ public class Histo extends JFrame implements ActionListener {
 
         double errorFuntion1 = Erf.erf((minGaus - Pars[1]) / (Pars[2] * Math.sqrt(2)));
         double errorFuntion2 = Erf.erf((maxGaus - Pars[1]) / (Pars[2] * Math.sqrt(2)));
-        signalFit = (int) (Math.sqrt(Math.PI / 2.) * Pars[0] * Pars[2] * (errorFuntion2 - errorFuntion1) / (this.h1.binLowerEdge(1) - this.h1
+        signalFit = (int) (Math.sqrt(Math.PI / 2.) * Pars[0] * Pars[2] * (errorFuntion2 - errorFuntion1) / (h1.binLowerEdge(1) - h1
                 .binLowerEdge(0)));
         TotalFit = (signalFit + BckFit);
 
@@ -649,11 +660,11 @@ public class Histo extends JFrame implements ActionListener {
         String[] parsData = {"Total:" + TotalFit, "Background:" + BckFit, "Signal:" + signalFit,
                 "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.),
                 "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.)};
-        this.c1.drawTextBox(parsData);
+        c1.drawTextBox(parsData);
 
     }
 
-    double BackgroundIntegral(Double xmin, Double xmax) {
+    static double BackgroundIntegral(Double xmin, Double xmax) {
 
         return ((xmax - xmin) * Pars[5] + Pars[4] * (Math.pow(xmax, 2) - Math.pow(xmin, 2)) / 2.)
                 + (Pars[3] * (Math.pow(xmax, 3) - Math.pow(xmin, 3)) / 3.);
@@ -714,6 +725,27 @@ public class Histo extends JFrame implements ActionListener {
 //        minGaussRange = Double.parseDouble(df.format(max));
         //  maxGaussRange = Double.parseDouble(decimalFormat.format(max));
         System.out.println(maxGaussRange);
+    }
+
+    public static void setMinPolyRange(double min) {
+//        DecimalFormat df = new DecimalFormat("#.###");
+//        minGaussRange = Double.parseDouble(df.format(min));
+        //   minGaussRange=min;
+        minPolyRange = new BigDecimal(min).setScale(3, RoundingMode.HALF_UP).doubleValue();
+
+
+        // minGaussRange = Double.parseDouble(decimalFormat.format(min));
+        System.out.println(minPolyRange);
+
+    }
+
+    public static void setMaxPolyRange(double max) {
+        // maxGaussRange=max;
+        maxPolyRange = new BigDecimal(max).setScale(3, RoundingMode.HALF_UP).doubleValue();
+//        DecimalFormat df = new DecimalFormat("#.###");
+//        minGaussRange = Double.parseDouble(df.format(max));
+        //  maxGaussRange = Double.parseDouble(decimalFormat.format(max));
+        System.out.println(maxPolyRange);
     }
 }
 
