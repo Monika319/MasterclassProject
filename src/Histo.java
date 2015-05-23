@@ -83,6 +83,7 @@ public class Histo extends JFrame implements ActionListener {
     public double maxPolyRange;
     public Listeners listeners;
     public static DecimalFormat decimalFormat;
+    private JButton fitButton;
 
     public Histo() {
 
@@ -129,7 +130,8 @@ public class Histo extends JFrame implements ActionListener {
         bislider = new BiSlider();
         bislider1 = new BiSlider();
         listeners = new Listeners();
-        decimalFormat = new DecimalFormat("0.001");
+        decimalFormat = new DecimalFormat("#.###");
+        fitButton = new JButton("Fit signal+background");
 
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -239,7 +241,7 @@ public class Histo extends JFrame implements ActionListener {
 
         bislider.setMinimumColor(Color.green);
         bislider.setMaximumValue(2D);
-        bislider.setDecimalFormater(new DecimalFormat("0.001"));
+        bislider.setDecimalFormater(new DecimalFormat("#.###"));
         bislider.setVisible(true);
 
         bislider.addBiSliderListener(listeners.sliderListener);
@@ -247,16 +249,20 @@ public class Histo extends JFrame implements ActionListener {
 
         bislider1.setMinimumColor(Color.blue);
         bislider1.setMaximumValue(2D);
+        bislider1.setDecimalFormater(new DecimalFormat("#.###"));
         bislider1.addBiSliderListener(listeners.sliderListener);
         bislider1.setVisible(true);
         GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
         fit_panel.setLayout(fit_panelLayout);
         fit_panelLayout.setHorizontalGroup(
-                fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(bislider)
                                 .addComponent(bislider1))
-                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
+                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(fitButton)
+                                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
+                        )
 
 
 //                        .addGroup(fit_panelLayout.createSequentialGroup()
@@ -269,11 +275,14 @@ public class Histo extends JFrame implements ActionListener {
         fit_panelLayout.setVerticalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(fit_panelLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30)
-                                .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30, 30))
+                                        .addGap(30, 30, 30)
+                                        .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(30, 30, 30)
+                                        .addComponent(fitButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(30, 30, 30)
+                        )
                 //mozna dac do gapow wieksze liczby i wtedy sie rozciagnie cale okno
 
         );
@@ -492,37 +501,37 @@ public class Histo extends JFrame implements ActionListener {
 
         //	c1.setLegend(false);
         // c1.clearData();
-        try {
-            fr = new FileReader(name);
-        } catch (FileNotFoundException e) {
-            System.out.println("BÅ?ÄD PRZY OTWIERANIU PLIKU!");
-            System.exit(1);
-        }
-        StreamTokenizer st = new StreamTokenizer(fr);
-        // ODCZYT KOLEJNYCH "TOKENÃW" Z PLIKU:
-        try {
-            while ((wartosc = st.nextToken()) != StreamTokenizer.TT_EOF) {
-                if (wartosc == StreamTokenizer.TT_WORD)
-                    System.out.println("Wczytano sÅowo: " + st.sval);
-                else if (wartosc == StreamTokenizer.TT_NUMBER)
-                    System.out.println("Wczytano liczbÄ: " + st.nval);
-                //h1.fill(st.nval);
-
-            }
-        } catch (IOException e) {
-            System.out.println("BÅ?ÄD ODCZYTU Z PLIKU!");
-            System.exit(2);
-        }
+        //try {
+//            fr = new FileReader(name);
+//        } catch (FileNotFoundException e) {
+//            System.out.println("BÅ?ÄD PRZY OTWIERANIU PLIKU!");
+//            System.exit(1);
+//        }
+//        StreamTokenizer st = new StreamTokenizer(fr);
+//        // ODCZYT KOLEJNYCH "TOKENÃW" Z PLIKU:
+//        try {
+//            while ((wartosc = st.nextToken()) != StreamTokenizer.TT_EOF) {
+//                if (wartosc == StreamTokenizer.TT_WORD)
+//                    System.out.println("Wczytano sÅowo: " + st.sval);
+//                else if (wartosc == StreamTokenizer.TT_NUMBER)
+//                    System.out.println("Wczytano liczbÄ: " + st.nval);
+//                //h1.fill(st.nval);
+//
+//            }
+//        } catch (IOException e) {
+//            System.out.println("BÅ?ÄD ODCZYTU Z PLIKU!");
+//            System.exit(2);
+//        }
 
 
         P0D list_data = new P0D("Histogram", fileName);
         //  ZAMYKANIE PLIKU:
-        try {
-            fr.close();
-        } catch (IOException e) {
-            System.out.println("BÅ?ÄD PRZY ZAMYKANIU PLIKU!");
-            System.exit(3);
-        }
+//        try {
+//            fr.close();
+//        } catch (IOException e) {
+//            System.out.println("BÅ?ÄD PRZY ZAMYKANIU PLIKU!");
+//            System.exit(3);
+//        }
 
         h1 = list_data.getH1D(400, xminrange, xmaxrange);
 

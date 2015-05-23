@@ -2,20 +2,36 @@ import com.visutools.nav.bislider.BiSlider;
 import com.visutools.nav.bislider.BiSliderEvent;
 import com.visutools.nav.bislider.BiSliderListener;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
  * Created by monika03 on 22.05.15.
  */
 public class Listeners {
-    SliderListener sliderListener;
+    public SliderListener sliderListener;
+    FitListener fitListener;
 
 
     Listeners() {
-        sliderListener = new SliderListener();
+
+     //   fitListener=new FitListener();
+                sliderListener = new SliderListener();
     }
 
 
+}
+class FitListener implements ActionListener {
+    private SliderListener gaussSliderListener;
+    FitListener() {
+        super();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+         gaussSliderListener= new SliderListener();
+    }
 }
 
 class SliderListener implements BiSliderListener {
