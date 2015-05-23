@@ -1,20 +1,22 @@
 
 
 import com.visutools.nav.bislider.BiSlider;
+import com.visutools.nav.bislider.BiSliderListener;
 import hep.aida.IFitResult;
 import hep.aida.IFunction;
 import jhplot.*;
-
 import org.apache.commons.math3.special.Erf;
 
 import javax.swing.*;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StreamTokenizer;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 
@@ -24,6 +26,7 @@ public class Histo extends JFrame implements ActionListener {
         double wartosc;
         new Histo();
     }
+
     private Box.Filler filler1;
     private JComboBox jComboBox1;
     private JComboBox jComboBox2;
@@ -34,7 +37,7 @@ public class Histo extends JFrame implements ActionListener {
     private JLayeredPane jLayeredPane1;
     private JLayeredPane jLayeredPane2;
     //ivate JLayeredPane jLayeredPane31;
-    private JMenu jMenu1 ;
+    private JMenu jMenu1;
     private JMenu jMenu2;
     private JLayeredPane jLayeredPane3;
     private JMenuBar jMenuBar1;
@@ -74,6 +77,12 @@ public class Histo extends JFrame implements ActionListener {
     private JTabbedPane jTabbedPane6;
     private CheckBoxList list2;
     private JCheckBox[] boxes2;
+    public static double minGaussRange;
+    public static double maxGaussRange;
+    public double minPolyRange;
+    public double maxPolyRange;
+    public Listeners listeners;
+    public static DecimalFormat decimalFormat;
 
     public Histo() {
 
@@ -117,9 +126,10 @@ public class Histo extends JFrame implements ActionListener {
         jMenuItem3 = new JMenuItem();
         jMenuItem2 = new JMenuItem();
         jMenu2 = new JMenu();
-        bislider=new BiSlider();
-        bislider1=new BiSlider();
-
+        bislider = new BiSlider();
+        bislider1 = new BiSlider();
+        listeners = new Listeners();
+        decimalFormat = new DecimalFormat("0.001");
 
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -227,9 +237,17 @@ public class Histo extends JFrame implements ActionListener {
 
         fit_panel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
 
-        bislider.setDefaultColor(Color.blue);
+        bislider.setMinimumColor(Color.green);
+        bislider.setMaximumValue(2D);
+        bislider.setDecimalFormater(new DecimalFormat("0.001"));
         bislider.setVisible(true);
-        bislider1.setDefaultColor(Color.blue);
+
+        bislider.addBiSliderListener(listeners.sliderListener);
+
+
+        bislider1.setMinimumColor(Color.blue);
+        bislider1.setMaximumValue(2D);
+        bislider1.addBiSliderListener(listeners.sliderListener);
         bislider1.setVisible(true);
         GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
         fit_panel.setLayout(fit_panelLayout);
@@ -239,7 +257,6 @@ public class Histo extends JFrame implements ActionListener {
                                 .addComponent(bislider)
                                 .addComponent(bislider1))
                         .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
-
 
 
 //                        .addGroup(fit_panelLayout.createSequentialGroup()
@@ -252,20 +269,14 @@ public class Histo extends JFrame implements ActionListener {
         fit_panelLayout.setVerticalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(fit_panelLayout.createSequentialGroup()
-                                .addGap(30, 30,30)
+                                .addGap(30, 30, 30)
                                 .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addGap(30, 30,30)
+                                .addGap(30, 30, 30)
                                 .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30))
                 //mozna dac do gapow wieksze liczby i wtedy sie rozciagnie cale okno
 
         );
-
-
-
-
-
-
 
 
         javax.swing.GroupLayout jLayeredPane2Layout = new GroupLayout(jLayeredPane2);
@@ -343,47 +354,38 @@ public class Histo extends JFrame implements ActionListener {
     public void read() {
         int i;
         jComboBox1.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                jComboBox1= (JComboBox)e.getSource();
-                String s = (String)jComboBox1.getSelectedItem();
+            public void actionPerformed(ActionEvent e) {
+                jComboBox1 = (JComboBox) e.getSource();
+                String s = (String) jComboBox1.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp"){
+                if (s == "pp") {
                     plot_hist(0.0D, 1.0D, "pp-K0.txt", 110);
-                }
-                else if (s == "PbPb"){
+                } else if (s == "PbPb") {
                     plot_hist(0.0D, 1.0D, "PbPb-K0.txt", 1450);
-                }
-                else if (s == "PbPb-0-10%"){
+                } else if (s == "PbPb-0-10%") {
                     plot_hist(0.0D, 1.0D, "dataset11.txt", 2600);
-                    FunctionFitter(0.487, 0.508, 0.3, 1D);
-                }
-                else if (s == "PbPb-10-20%"){
+                    FunctionFitter(minGaussRange, maxGaussRange, 0.3, 1D);
+
+                    // FunctionFitter(0.487, 0.508, 0.3, 1D);
+                } else if (s == "PbPb-10-20%") {
                     plot_hist(0.0D, 1.0D, "dataset12.txt", 2000);
-                }
-                else if (s == "PbPb-20-30%"){
+                } else if (s == "PbPb-20-30%") {
                     plot_hist(0.0D, 1.0D, "dataset13.txt", 1400);
-                }
-                else if (s == "PbPb-30-40%"){
+                } else if (s == "PbPb-30-40%") {
                     plot_hist(0.0D, 1.0D, "dataset14.txt", 850);
-                }
-                else if (s == "PbPb-40-50%"){
+                } else if (s == "PbPb-40-50%") {
                     plot_hist(0.0D, 1.0D, "dataset15.txt", 420);
-                }
-                else if (s == "PbPb-50-60%"){
+                } else if (s == "PbPb-50-60%") {
                     plot_hist(0.0D, 1.0D, "dataset16.txt", 220);
-                }
-                else if (s == "PbPb-60-70%"){
+                } else if (s == "PbPb-60-70%") {
                     plot_hist(0.0D, 1.0D, "dataset17.txt", 140);
-                }
-                else if (s == "PbPb-70-80%"){
+                } else if (s == "PbPb-70-80%") {
                     plot_hist(0.0D, 1.0D, "dataset18.txt", 60);
-                }
-                else if (s == "PbPb-80-90%"){
+                } else if (s == "PbPb-80-90%") {
                     plot_hist(0.0D, 1.0D, "dataset19.txt", 35);
-                }
-                else if (s == "PbPb-90-100%"){
+                } else if (s == "PbPb-90-100%") {
                     plot_hist(0.0D, 1.0D, "dataset20.txt", 2.2);
                 }
             }
@@ -392,46 +394,35 @@ public class Histo extends JFrame implements ActionListener {
         jComboBox2.addActionListener(new ActionListener() {
 
 
-            public void actionPerformed(ActionEvent e){
-                jComboBox2= (JComboBox)e.getSource();
-                String s = (String)jComboBox2.getSelectedItem();
+            public void actionPerformed(ActionEvent e) {
+                jComboBox2 = (JComboBox) e.getSource();
+                String s = (String) jComboBox2.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp"){
+                if (s == "pp") {
                     plot_hist(1.0D, 2.0D, "pp-Lambda.txt", 150);
-                }
-                else if (s == "PbPb"){
+                } else if (s == "PbPb") {
                     plot_hist(1.0D, 2.0D, "PbPb-Lambda.txt", 820);
-                }
-                else if (s == "PbPb-0-10%"){
+                } else if (s == "PbPb-0-10%") {
                     plot_hist(1.0D, 2.0D, "dataset21.txt", 1200);
-                }
-                else if (s == "PbPb-10-20%"){
+                } else if (s == "PbPb-10-20%") {
                     plot_hist(1.0D, 2.0D, "dataset22.txt", 1150);
-                }
-                else if (s == "PbPb-20-30%"){
+                } else if (s == "PbPb-20-30%") {
                     plot_hist(1.0D, 2.0D, "dataset23.txt", 850);
-                }
-                else if (s == "PbPb-30-40%"){
+                } else if (s == "PbPb-30-40%") {
                     plot_hist(1.0D, 2.0D, "dataset24.txt", 500);
-                }
-                else if (s == "PbPb-40-50%"){
+                } else if (s == "PbPb-40-50%") {
                     plot_hist(1.0D, 2.0D, "dataset25.txt", 300);
-                }
-                else if (s == "PbPb-50-60%"){
+                } else if (s == "PbPb-50-60%") {
                     plot_hist(1.0D, 2.0D, "dataset26.txt", 150);
-                }
-                else if (s == "PbPb-60-70%"){
+                } else if (s == "PbPb-60-70%") {
                     plot_hist(1.0D, 2.0D, "dataset27.txt", 60);
-                }
-                else if (s == "PbPb-70-80%"){
+                } else if (s == "PbPb-70-80%") {
                     plot_hist(1.0D, 2.0D, "dataset28.txt", 35);
-                }
-                else if (s == "PbPb-80-90%"){
+                } else if (s == "PbPb-80-90%") {
                     plot_hist(1.0D, 2.0D, "dataset29.txt", 10);
-                }
-                else if (s == "PbPb-90-100%"){
+                } else if (s == "PbPb-90-100%") {
                     plot_hist(1.0D, 2.0D, "dataset30.txt", 8);
                 }
             }
@@ -440,46 +431,35 @@ public class Histo extends JFrame implements ActionListener {
         jComboBox4.addActionListener(new ActionListener() {
 
 
-            public void actionPerformed(ActionEvent e){
-                jComboBox4= (JComboBox)e.getSource();
-                String s = (String)jComboBox4.getSelectedItem();
+            public void actionPerformed(ActionEvent e) {
+                jComboBox4 = (JComboBox) e.getSource();
+                String s = (String) jComboBox4.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp"){
+                if (s == "pp") {
                     plot_hist(1.0D, 2.0D, "pp-AntiLambda.txt", 60);
-                }
-                else if (s == "PbPb"){
+                } else if (s == "PbPb") {
                     plot_hist(1.0D, 2.0D, "PbPb-AntiLambda.txt", 800);
-                }
-                else if (s == "PbPb-0-10%"){
+                } else if (s == "PbPb-0-10%") {
                     plot_hist(1.0D, 2.0D, "dataset31.txt", 1150);
-                }
-                else if (s == "PbPb-10-20%"){
+                } else if (s == "PbPb-10-20%") {
                     plot_hist(1.0D, 2.0D, "dataset32.txt", 1100);
-                }
-                else if (s == "PbPb-20-30%"){
+                } else if (s == "PbPb-20-30%") {
                     plot_hist(1.0D, 2.0D, "dataset33.txt", 800);
-                }
-                else if (s == "PbPb-30-40%"){
+                } else if (s == "PbPb-30-40%") {
                     plot_hist(1.0D, 2.0D, "dataset34.txt", 450);
-                }
-                else if (s == "PbPb-40-50%"){
+                } else if (s == "PbPb-40-50%") {
                     plot_hist(1.0D, 2.0D, "dataset35.txt", 270);
-                }
-                else if (s == "PbPb-50-60%"){
+                } else if (s == "PbPb-50-60%") {
                     plot_hist(1.0D, 2.0D, "dataset36.txt", 130);
-                }
-                else if (s == "PbPb-60-70%"){
+                } else if (s == "PbPb-60-70%") {
                     plot_hist(1.0D, 2.0D, "dataset37.txt", 70);
-                }
-                else if (s == "PbPb-70-80%"){
+                } else if (s == "PbPb-70-80%") {
                     plot_hist(1.0D, 2.0D, "dataset38.txt", 25);
-                }
-                else if (s == "PbPb-80-90%"){
+                } else if (s == "PbPb-80-90%") {
                     plot_hist(1.0D, 2.0D, "dataset39.txt", 8);
-                }
-                else if (s == "PbPb-90-100%"){
+                } else if (s == "PbPb-90-100%") {
                     plot_hist(1.0D, 2.0D, "dataset40.txt", 1.2);
                 }
             }
@@ -488,9 +468,7 @@ public class Histo extends JFrame implements ActionListener {
     }
 
 
-
-
-    public void plot_hist(double xminrange, double xmaxrange, String fileName, double yAxisMax)  {
+    public void plot_hist(double xminrange, double xmaxrange, String fileName, double yAxisMax) {
         name = fileName;
 
 
@@ -591,7 +569,6 @@ public class Histo extends JFrame implements ActionListener {
         this.c1.refreshFrame();
 
     }
-
 
 
     void FunctionFitter(double minGaus, double maxGaus, double minPoly,
@@ -703,6 +680,31 @@ public class Histo extends JFrame implements ActionListener {
                 new Histo().setVisible(true);
             }
         });
+    }
+
+    public double getMinGaussRange() {
+        return minGaussRange;
+    }
+
+    public static void setMinGaussRange(double min) {
+//        DecimalFormat df = new DecimalFormat("#.###");
+//        minGaussRange = Double.parseDouble(df.format(min));
+        //   minGaussRange=min;
+        minGaussRange = new BigDecimal(min).setScale(3, RoundingMode.HALF_UP).doubleValue();
+
+
+        // minGaussRange = Double.parseDouble(decimalFormat.format(min));
+        System.out.println(minGaussRange);
+
+    }
+
+    public static void setMaxGaussRange(double max) {
+        // maxGaussRange=max;
+        maxGaussRange = new BigDecimal(max).setScale(3, RoundingMode.HALF_UP).doubleValue();
+//        DecimalFormat df = new DecimalFormat("#.###");
+//        minGaussRange = Double.parseDouble(df.format(max));
+        //  maxGaussRange = Double.parseDouble(decimalFormat.format(max));
+        System.out.println(maxGaussRange);
     }
 }
 
