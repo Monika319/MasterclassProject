@@ -34,6 +34,8 @@ public class Histo extends JFrame implements ActionListener {
     private JLabel jLabel1;
     private JLabel jLabel2;
     private JLabel jLabel3;
+    private JLabel bkgLabel;
+    private JLabel sigLabel;
     private JLayeredPane jLayeredPane1;
     private JLayeredPane jLayeredPane2;
     //ivate JLayeredPane jLayeredPane31;
@@ -93,9 +95,9 @@ public class Histo extends JFrame implements ActionListener {
         c1 = new HPlot("Canvas", 600, 400);
 
         c1.setLegendFont(new Font("Lucida Sans", 1, 18));
-        this.c1.getAntiAlias();
+        // this.c1.getAntiAlias();
         this.c1.setGTitle("Invariant Mass Distribution");
-        this.c1.setAutoRange();
+        // this.c1.setAutoRange();
         this.c1.setNameX("Invariant Mass[GeV]");
         this.c1.setNameY("Counts");
         this.c1.setName("Invariant Mass spectra");
@@ -118,6 +120,8 @@ public class Histo extends JFrame implements ActionListener {
         jLabel1 = new JLabel();
         jLabel2 = new JLabel();
         jLabel3 = new JLabel();
+        bkgLabel = new JLabel("Bkg range:");
+        sigLabel = new JLabel("Sig range:");
         jComboBox4 = new JComboBox();
         fit_panel = new JPanel();
         jLayeredPane3 = new JLayeredPane();
@@ -261,7 +265,9 @@ public class Histo extends JFrame implements ActionListener {
         fit_panelLayout.setHorizontalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                         .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(sigLabel)
                                 .addComponent(bislider)
+                                .addComponent(bkgLabel)
                                 .addComponent(bislider1))
                         .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addComponent(fitButton)
@@ -280,8 +286,10 @@ public class Histo extends JFrame implements ActionListener {
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(fit_panelLayout.createSequentialGroup()
                                         .addGap(30, 30, 30)
+                                        .addComponent(sigLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
+                                        .addComponent(bkgLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
                                         .addComponent(fitButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -488,7 +496,7 @@ public class Histo extends JFrame implements ActionListener {
         c1.clearData();
         c1.clearAllLabels();
 
-        c1.setGrid(getY(), true);
+        // c1.setGrid(getY(), true);
         int number = c1.getNumberOfTics(getY());
         //c1.setNumberOfTics(MAXIMIZED_VERT, 5);
         //	c1.setTicLength(getY(), 50D);
@@ -576,6 +584,7 @@ public class Histo extends JFrame implements ActionListener {
 //		this.c1.setName("Invariant Mass spectra");
         this.c1.setGTitle("Invariant Mass Distribution");
         this.c1.setRange(xminrange, xmaxrange, 0, yAxisMax);
+        //this.c1.setTicLabels(true);
         this.c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
         this.c1.draw(h1);
         this.c1.drawStatBox(h1, 300, 50);
@@ -589,10 +598,11 @@ public class Histo extends JFrame implements ActionListener {
 //        if (fFitGaus!=null){
 //            c1.d
 //        }
-        if (fFitGaus!=null){
-        c1.clearAllData();
+        if (fFitGaus != null) {
+            c1.clearAllData();
             c1.draw(h1);
-        System.out.println("gausslinestyle :"+c1.getData().toString());}
+            System.out.println("gausslinestyle :" + c1.getData().toString());
+        }
         c1.clearLabels();// clearing data from histogram and plotting data from fit
         polynomialfitter = new HFitter();
         functionFitter = new HFitter();
