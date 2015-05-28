@@ -34,14 +34,15 @@ public class Exercise {
         createTables();
     }
 
+
     public boolean createTables() {
-        String createUsers = "CREATE TABLE IF NOT EXISTS users (id_user INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(255), surname varchar(255))";
-        String createDatasets = "CREATE TABLE IF NOT EXISTS datasets (id_dataset INTEGER PRIMARY KEY AUTOINCREMENT, collision varchar(255), gaussParameters varchar(255), polynomialParameters varchar(255))";
-        String createResults = "CREATE TABLE IF NOT EXISTS results (id_result INTEGER PRIMARY KEY AUTOINCREMENT, id_user int, id_dataset int)";
+        String createUsers = "CREATE TABLE IF NOT EXISTS users(nameSurname varchar(255) PRIMARY KEY, collision varchar(255), total varchar(255), background varchar(255),signal varchar(255),mean varchar(255),sigma varchar(255))";
+//        String createDatasets = "CREATE TABLE IF NOT EXISTS datasets (id_dataset INTEGER PRIMARY KEY AUTOINCREMENT, collision varchar(255), gaussParameters varchar(255), polynomialParameters varchar(255))";
+//        String createResults = "CREATE TABLE IF NOT EXISTS results (id_result INTEGER PRIMARY KEY AUTOINCREMENT, id_user int, id_dataset int)";
         try {
             stat.execute(createUsers);
-            stat.execute(createDatasets);
-            stat.execute(createResults);
+//            stat.execute(createDatasets);
+//            stat.execute(createResults);
         } catch (SQLException e) {
             System.err.println("Table creating error");
             e.printStackTrace();
@@ -50,12 +51,17 @@ public class Exercise {
         return true;
     }
 
-    public boolean insertUser(String name, String surname) {
+    public boolean insertUser(String nameSurname, String collision, String total, String background, String signal, String mean, String sigma) {
         try {
             PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into users values (NULL, ?, ?);");
-            prepStmt.setString(1, name);
-            prepStmt.setString(2, surname);
+                    "insert or replace into users values (?,?,?,?,?,?,?);");
+            prepStmt.setString(1, nameSurname);
+            prepStmt.setString(2, collision);
+            prepStmt.setString(3, total);
+            prepStmt.setString(4, background);
+            prepStmt.setString(5, signal);
+            prepStmt.setString(6, mean);
+            prepStmt.setString(7, sigma);
             prepStmt.execute();
         } catch (SQLException e) {
             System.err.println("Error inserting user");
@@ -65,46 +71,24 @@ public class Exercise {
         return true;
     }
 
-    public boolean insertDataset(String collision, String gaussParameters, String polynomialParameters) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into datasets values (NULL, ?, ?, ?);");
-            prepStmt.setString(1, collision);
-            prepStmt.setString(2, gaussParameters);
-            prepStmt.setString(2, polynomialParameters);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Error in dataset");
-            return false;
-        }
-        return true;
-    }
-
-    public boolean insertResults(int idUser, int idDataset) {
-        try {
-            PreparedStatement prepStmt = conn.prepareStatement(
-                    "insert into results values (NULL, ?, ?);");
-            prepStmt.setInt(1, idUser);
-            prepStmt.setInt(2, idDataset);
-            prepStmt.execute();
-        } catch (SQLException e) {
-            System.err.println("Error in adding fit results");
-            return false;
-        }
-        return true;
-    }
 
     public List<User> selectUsers() {
         List<User> users = new LinkedList<User>();
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM users");
             int id;
-            String name, surname;
+            String nameSurname, collision, total,background,signal,mean,sigma;
             while (result.next()) {
-                id = result.getInt("id_user");
-                name = result.getString("name");
-                surname = result.getString("surname");
-                users.add(new User(id, name, surname));
+                // id = result.getInt("id_user");
+                nameSurname = result.getString("nameSurname");
+                collision = result.getString("collision");
+                total = result.getString("total");
+                background = result.getString("background");
+                signal = result.getString("signal");
+                mean = result.getString("mean");
+                sigma = result.getString("sigma");
+
+                users.add(new User(nameSurname, collision, total,background,signal,mean,sigma));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,44 +97,25 @@ public class Exercise {
         return users;
     }
 
-    public List<Dataset> selectDatasets() {
-        List<Dataset> datasets = new LinkedList<Dataset>();
+    public void deleteUsers() {
+        List<User> users = new LinkedList<User>();
         try {
-            ResultSet result = stat.executeQuery("SELECT * FROM datasets");
+            ResultSet result = stat.executeQuery("DELETE FROM users");
             int id;
-            String collision, gaussParameters, polynomialParameters;
+            String name, surname;
             while (result.next()) {
-                id = result.getInt("id_dataset");
-                collision = result.getString("collision");
-                gaussParameters = result.getString("gaussParameters");
-                polynomialParameters = result.getString("polynomialParameters");
-               datasets.add(new Dataset(id,collision, gaussParameters,polynomialParameters));
+//                id = result.getInt("id_user");
+//                name = result.getString("name");
+//                surname = result.getString("surname");
+                users.clear();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            return null;
+            // return null;
         }
-        return datasets;
+        //  return users;
     }
 
-    public List<Result> selectResults() {
-        List<Result> results = new LinkedList<Result>();
-        try {
-            ResultSet result = stat.executeQuery("SELECT * FROM results");
-            int id;
-            int idUser,idDataset;
-            while (result.next()) {
-                id = result.getInt("id_result");
-                idUser = result.getInt("id_user");
-                idDataset = result.getInt("id_dataset");
-                results.add(new Result(id,idUser,idDataset));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-        return results;
-    }
 
     public void closeConnection() {
         try {

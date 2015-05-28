@@ -36,6 +36,23 @@ class FitListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         Histo.FunctionFitter(Histo.minGaussRange, Histo.maxGaussRange, Histo.minPolyRange, Histo.maxPolyRange);
+        Exercise exercise = new Exercise();
+
+        java.util.List<User> users;
+
+
+        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
+        exercise.insertUser("Piotr Wojtecki", "PbPb-K0", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
+        exercise.insertUser("Abdul Dabdul", "PbPb-Lambda", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
+        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
+
+
+        users = exercise.selectUsers();
+        System.out.println("Users list: ");
+        for (User c : users)
+            System.out.println(c);
+
+        exercise.closeConnection();
         //  JButton fitButton = (JButton) actionEvent.getSource();
     }
 }
@@ -47,7 +64,7 @@ class SliderListener implements BiSliderListener {
 
     @Override
     public void newColors(BiSliderEvent BiSliderEvent_Arg) {
-        
+
     }
 
     @Override

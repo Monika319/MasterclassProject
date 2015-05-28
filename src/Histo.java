@@ -26,26 +26,7 @@ public class Histo extends JFrame implements ActionListener {
     public static void main(String args[]) {
         double wartosc;
         new Histo();
-        Exercise exercise = new Exercise();
-        exercise.insertUser("Monika", "Seniut");
-        exercise.insertUser("Piotr", "Wojtecki");
-        exercise.insertUser("Abdul", "Dabdul");
 
-        exercise.insertDataset("Pb-Pb", "gauss", "poly");
-        exercise.insertDataset("K0", "gauss1", "poly1");
-        exercise.insertDataset("dataset16", "gauss2", "poly2");
-        java.util.List<User> users = exercise.selectUsers();
-        java.util.List<Dataset> datasets = exercise.selectDatasets();
-
-        System.out.println("Users list: ");
-        for (User c : users)
-            System.out.println(c);
-
-        System.out.println("Datasets:");
-        for (Dataset k : datasets)
-            System.out.println(datasets);
-
-        exercise.closeConnection();
     }
 
     private Box.Filler filler1;
@@ -107,6 +88,10 @@ public class Histo extends JFrame implements ActionListener {
     public Listeners listeners;
     public static DecimalFormat decimalFormat;
     private JButton fitButton;
+    public static String[] parsData;
+    public static String dataForDatabase;
+    public static String total, background, signal, mean, sigma;
+
 
     public Histo() {
 
@@ -688,10 +673,16 @@ public class Histo extends JFrame implements ActionListener {
         System.out.println("fitted mean: " + Double.toString(1000D * Pars[1]));
         System.out.println("fitted sigma: " + Double.toString(1000D * Pars[2]));
         DecimalFormat df = new DecimalFormat("0.000000");
-        String[] parsData = {"Total:" + TotalFit, "Background:" + BckFit, "Signal:" + signalFit,
+        parsData = new String[]{"Total:" + TotalFit, "Background:" + BckFit, "Signal:" + signalFit,
                 "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.),
                 "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.)};
         c1.drawTextBox(parsData);
+        total = "Total:" + TotalFit;
+        background = " Background:" + BckFit;
+        signal = " Signal:" + signalFit;
+        mean = "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.);
+        sigma = "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.);
+        dataForDatabase = "Total:" + TotalFit + " Background:" + BckFit + " Signal:" + signalFit + "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.) + "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.);
 
     }
 
@@ -731,6 +722,10 @@ public class Histo extends JFrame implements ActionListener {
                 new Histo().setVisible(true);
             }
         });
+    }
+
+    public String getParsdata() {
+        return parsData.toString();
     }
 
     public double getMinGaussRange() {
