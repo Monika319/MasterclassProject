@@ -23,6 +23,8 @@ import java.util.*;
 
 public class Histo extends JFrame implements ActionListener {
 
+
+
     public static void main(String args[]) {
         double wartosc;
         new Histo();
@@ -90,7 +92,8 @@ public class Histo extends JFrame implements ActionListener {
     private JButton fitButton;
     public static String[] parsData;
     public static String dataForDatabase;
-    public static String total, background, signal, mean, sigma;
+    private static String backgroundFit, signal, mean, sigma;
+    private static String total;
 
 
     public Histo() {
@@ -678,7 +681,7 @@ public class Histo extends JFrame implements ActionListener {
                 "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.)};
         c1.drawTextBox(parsData);
         total = "Total:" + TotalFit;
-        background = " Background:" + BckFit;
+        backgroundFit = " Background:" + BckFit;
         signal = " Signal:" + signalFit;
         mean = "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.);
         sigma = "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.);
@@ -724,9 +727,23 @@ public class Histo extends JFrame implements ActionListener {
         });
     }
 
-    public String getParsdata() {
-        return parsData.toString();
+    public static String getTotal() {
+        return total;
     }
+    public static String getBackgroundFit() {
+        return backgroundFit;
+    }
+    public static String getSignal() {
+        return signal;
+    }
+    public static String getSigma() {
+        return sigma;
+    }
+    public static String getMean() {
+        return mean;
+    }
+
+
 
     public double getMinGaussRange() {
         return minGaussRange;

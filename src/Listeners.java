@@ -41,10 +41,10 @@ class FitListener implements ActionListener {
         java.util.List<User> users;
 
 
-        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
-        exercise.insertUser("Piotr Wojtecki", "PbPb-K0", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
-        exercise.insertUser("Abdul Dabdul", "PbPb-Lambda", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
-        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.total, Histo.background, Histo.signal, Histo.mean, Histo.sigma);
+        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        exercise.insertUser("Piotr Wojtecki", "PbPb-K0", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        exercise.insertUser("Abdul Dabdul", "PbPb-Lambda", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
 
 
         users = exercise.selectUsers();
