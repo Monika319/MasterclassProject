@@ -9,6 +9,7 @@ import org.apache.commons.math3.special.Erf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
@@ -18,13 +19,33 @@ import java.io.StreamTokenizer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.*;
 
 public class Histo extends JFrame implements ActionListener {
 
     public static void main(String args[]) {
         double wartosc;
         new Histo();
+        Exercise exercise = new Exercise();
+        exercise.insertUser("Monika", "Seniut");
+        exercise.insertUser("Piotr", "Wojtecki");
+        exercise.insertUser("Abdul", "Dabdul");
+
+        exercise.insertDataset("Pb-Pb", "gauss", "poly");
+        exercise.insertDataset("K0", "gauss1", "poly1");
+        exercise.insertDataset("dataset16", "gauss2", "poly2");
+        java.util.List<User> users = exercise.selectUsers();
+        java.util.List<Dataset> datasets = exercise.selectDatasets();
+
+        System.out.println("Users list: ");
+        for (User c : users)
+            System.out.println(c);
+
+        System.out.println("Datasets:");
+        for (Dataset k : datasets)
+            System.out.println(datasets);
+
+        exercise.closeConnection();
     }
 
     private Box.Filler filler1;
