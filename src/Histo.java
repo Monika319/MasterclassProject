@@ -24,7 +24,6 @@ import java.util.*;
 public class Histo extends JFrame implements ActionListener {
 
 
-
     public static void main(String args[]) {
         double wartosc;
         new Histo();
@@ -52,6 +51,7 @@ public class Histo extends JFrame implements ActionListener {
     private JMenuItem jMenuItem3;
     private JPanel load_histo_panel;
     private JPanel fit_panel;
+    private JPanel sendResultsToDatabasePanel;
     private BiSlider bislider;
     private BiSlider bislider1;
     private JInternalFrame jInternalFrame1;
@@ -90,6 +90,7 @@ public class Histo extends JFrame implements ActionListener {
     public Listeners listeners;
     public static DecimalFormat decimalFormat;
     private JButton fitButton;
+    private JButton finishButton;
     public static String[] parsData;
     public static String dataForDatabase;
     private static String backgroundFit, signal, mean, sigma;
@@ -133,6 +134,7 @@ public class Histo extends JFrame implements ActionListener {
         sigLabel = new JLabel("Sig range:");
         jComboBox4 = new JComboBox();
         fit_panel = new JPanel();
+        sendResultsToDatabasePanel = new JPanel();
         jLayeredPane3 = new JLayeredPane();
         jMenuBar1 = new JMenuBar();
         jMenu1 = new JMenu();
@@ -147,6 +149,7 @@ public class Histo extends JFrame implements ActionListener {
         listeners = new Listeners();
         decimalFormat = new DecimalFormat("#.###");
         fitButton = new JButton("Fit signal+background");
+        finishButton = new JButton("Final measurement");
 
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -253,7 +256,7 @@ public class Histo extends JFrame implements ActionListener {
         );
 
         fit_panel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
-
+        sendResultsToDatabasePanel.setBorder(BorderFactory.createTitledBorder("Send to database panel"));
         bislider.setMinimumColor(Color.green);
         bislider.setMaximumValue(2D);
         bislider.setDecimalFormater(new DecimalFormat("#.###"));
@@ -262,7 +265,7 @@ public class Histo extends JFrame implements ActionListener {
         // bislider.addBiSliderListener(listeners.sliderListener);
         bislider.addBiSliderListener(listeners.sliderListener);
         fitButton.addActionListener(listeners.fitListener);
-
+        finishButton.addActionListener(listeners.finishListener);
 
         bislider1.setMinimumColor(Color.blue);
         bislider1.setMaximumValue(2D);
@@ -270,6 +273,40 @@ public class Histo extends JFrame implements ActionListener {
         bislider1.addBiSliderListener(listeners.sliderListener);
         bislider1.setVisible(true);
         GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
+        GroupLayout results_panelLayout = new GroupLayout(sendResultsToDatabasePanel);
+        sendResultsToDatabasePanel.setLayout(results_panelLayout);
+        fit_panel.setLayout(fit_panelLayout);
+
+//        results_panelLayout.setHorizontalGroup(
+//                results_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+//                        .addGroup(results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                                        .addComponent(finishButton)
+//                                        .addComponent(finishButton)
+//                                        .addComponent(finishButton)
+//                                        .addComponent(finishButton))
+//                                        .addGroup(results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                                        )
+//
+//                        );
+//        results_panelLayout.setVerticalGroup(
+//                results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+//                        .addGroup(results_panelLayout.createSequentialGroup()
+//                                        .addGap(30, 30, 30)
+//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                        .addGap(30, 30, 30)
+//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                        .addGap(30, 30, 30)
+//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                        .addGap(30, 30, 30)
+//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+//                                        .addGap(30, 30, 30)
+//
+//                        )
+//
+//
+//        );
+
+
         fit_panel.setLayout(fit_panelLayout);
         fit_panelLayout.setHorizontalGroup(
                 fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
@@ -278,9 +315,10 @@ public class Histo extends JFrame implements ActionListener {
                                 .addComponent(bislider)
                                 .addComponent(bkgLabel)
                                 .addComponent(bislider1))
-                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                         .addComponent(fitButton)
-                                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING))
+                                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                                .addComponent(finishButton))
                         )
 
 
@@ -303,6 +341,8 @@ public class Histo extends JFrame implements ActionListener {
                                         .addGap(30, 30, 30)
                                         .addComponent(fitButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
+                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addGap(30, 30, 30)
                         )
                 //mozna dac do gapow wieksze liczby i wtedy sie rozciagnie cale okno
 
@@ -315,16 +355,25 @@ public class Histo extends JFrame implements ActionListener {
                 jLayeredPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(load_histo_panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fit_panel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                     //   .addComponent(sendResultsToDatabasePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
         );
         jLayeredPane2Layout.setVerticalGroup(
                 jLayeredPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jLayeredPane2Layout.createSequentialGroup()
-                                .addComponent(load_histo_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fit_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 19, Short.MAX_VALUE))
+                                        .addComponent(load_histo_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                   //     .addComponent(sendResultsToDatabasePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+
+                                        .addComponent(fit_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+                                        .addGap(0, 19, Short.MAX_VALUE)
+//                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+
+                        )
         );
         jLayeredPane2.setLayer(load_histo_panel, JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(sendResultsToDatabasePanel, JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(fit_panel, JLayeredPane.DEFAULT_LAYER);
 
         GroupLayout jLayeredPane3Layout = new GroupLayout(jLayeredPane3);
@@ -360,22 +409,39 @@ public class Histo extends JFrame implements ActionListener {
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLayeredPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLayeredPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLayeredPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
+                                        .addComponent(jLayeredPane2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+
+                                        .addComponent(jLayeredPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
+//                                        .addComponent(sendResultsToDatabasePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+//                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
+                                        .addComponent(jLayeredPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
+                                        .addContainerGap()
+
+                        )
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+
                                 .addGap(0, 0, Short.MAX_VALUE)
+
                                 .addComponent(jLayeredPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                         .addGroup(layout.createSequentialGroup()
+
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLayeredPane2)
-                                        .addComponent(jLayeredPane3))
+
+                                                .addComponent(jLayeredPane2)
+
+                                                .addComponent(jLayeredPane3)
+
+
+                                )
                                 .addGap(0, 21, Short.MAX_VALUE))
         );
         pack();
@@ -730,19 +796,22 @@ public class Histo extends JFrame implements ActionListener {
     public static String getTotal() {
         return total;
     }
+
     public static String getBackgroundFit() {
         return backgroundFit;
     }
+
     public static String getSignal() {
         return signal;
     }
+
     public static String getSigma() {
         return sigma;
     }
+
     public static String getMean() {
         return mean;
     }
-
 
 
     public double getMinGaussRange() {

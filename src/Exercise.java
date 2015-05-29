@@ -36,7 +36,7 @@ public class Exercise {
 
 
     public boolean createTables() {
-        String createUsers = "CREATE TABLE IF NOT EXISTS users(nameSurname varchar(255) PRIMARY KEY, collision varchar(255), total varchar(255), background varchar(255),signal varchar(255),mean varchar(255),sigma varchar(255))";
+        String createUsers = "CREATE TABLE IF NOT EXISTS users(nameSurname varchar(255) , collision varchar(255) , total varchar(255), background varchar(255),signal varchar(255),mean varchar(255),sigma varchar(255),PRIMARY KEY(nameSurname,collision))";
 //        String createDatasets = "CREATE TABLE IF NOT EXISTS datasets (id_dataset INTEGER PRIMARY KEY AUTOINCREMENT, collision varchar(255), gaussParameters varchar(255), polynomialParameters varchar(255))";
 //        String createResults = "CREATE TABLE IF NOT EXISTS results (id_result INTEGER PRIMARY KEY AUTOINCREMENT, id_user int, id_dataset int)";
         try {
@@ -76,8 +76,7 @@ public class Exercise {
         List<User> users = new LinkedList<User>();
         try {
             ResultSet result = stat.executeQuery("SELECT * FROM users");
-            int id;
-            String nameSurname, collision, total,background,signal,mean,sigma;
+            String nameSurname, collision, total, background, signal, mean, sigma;
             while (result.next()) {
                 // id = result.getInt("id_user");
                 nameSurname = result.getString("nameSurname");
@@ -88,7 +87,7 @@ public class Exercise {
                 mean = result.getString("mean");
                 sigma = result.getString("sigma");
 
-                users.add(new User(nameSurname, collision, total,background,signal,mean,sigma));
+                users.add(new User(nameSurname, collision, total, background, signal, mean, sigma));
             }
         } catch (SQLException e) {
             e.printStackTrace();

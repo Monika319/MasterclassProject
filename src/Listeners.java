@@ -3,8 +3,12 @@ import com.visutools.nav.bislider.BiSliderEvent;
 import com.visutools.nav.bislider.BiSliderListener;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 /**
@@ -13,16 +17,176 @@ import java.awt.event.ActionListener;
 public class Listeners {
     SliderListener sliderListener;
     FitListener fitListener;
-    // private static int fitCounter=0;
+    FinishListener finishListener;
+    static ConfirmListener confirmListener;
+    static String nameSurname;
+    static String collision;
 
 
     Listeners() {
 
         fitListener = new FitListener();
         sliderListener = new SliderListener();
+        finishListener = new FinishListener();
+        confirmListener = new ConfirmListener();
+
     }
 
 
+}
+
+class FinishListener implements ActionListener {
+
+    FinishListener() {
+        super();
+
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        new AskForData();
+
+    }
+}
+
+
+class AskForData {
+    private JButton confirmButton;
+    JTextField nameField;
+    JTextField lastNameField;
+    JTextField collisionField;
+    GetDataListener getDataListener;
+
+    AskForData() {
+        initialize();
+    }
+
+    void initialize() {
+        JFrame askFrame = new JFrame();
+        askFrame.setTitle("Personal data");
+        askFrame.setPreferredSize(new Dimension(680, 150));
+        confirmButton = new JButton("confirm");
+        confirmButton.addActionListener(Listeners.confirmListener);
+        getDataListener = new GetDataListener();
+
+
+        JLabel nameLabel = new JLabel("First Name:");
+        nameField = new JTextField(20);
+        nameField.setName("nameField");
+        nameField.addActionListener(getDataListener);
+
+        nameLabel.setLabelFor(nameField);
+
+        JLabel lastNameLabel = new JLabel("Last Name:");
+        lastNameField = new JTextField(20);
+        lastNameField.setName("lastNameField");
+        lastNameLabel.setLabelFor(lastNameField);
+        lastNameField.addActionListener(getDataListener);
+
+        JLabel collisionLabel = new JLabel("Collision type:");
+        collisionField = new JTextField(20);
+        collisionField.setName("collisionField");
+        lastNameLabel.setLabelFor(collisionField);
+        collisionField.addActionListener(getDataListener);
+
+        JPanel panel = new JPanel();
+        GroupLayout panelLayout = new GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setAutoCreateGaps(true);
+        panelLayout.setAutoCreateContainerGaps(true);
+        panelLayout.setHorizontalGroup(
+                panelLayout.createSequentialGroup()
+                        .addComponent(nameLabel)
+                        .addComponent(nameField)
+                        .addComponent(lastNameLabel)
+                        .addComponent(lastNameField)
+                        .addGroup(panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(panelLayout.createSequentialGroup()
+                                                        .addComponent(collisionLabel)
+                                                        .addComponent(collisionField)
+                                        )
+                                        .addComponent(confirmButton)
+
+                        )
+        );
+        panelLayout.setVerticalGroup(
+                panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(nameLabel)
+                                .addComponent(nameField)
+                                .addComponent(lastNameLabel)
+                                .addComponent(lastNameField)
+                                .addComponent(collisionLabel)
+                                .addComponent(collisionField))
+                        .addGap(30, 30, 30)
+                        .addComponent(confirmButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+
+        );
+
+        askFrame.setContentPane(panel);
+        askFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        askFrame.pack();
+        askFrame.setVisible(true);
+
+
+    }
+}
+
+class GetDataListener implements ActionListener {
+    GetDataListener() {
+        super();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JTextField dataField = (JTextField) e.getSource();
+        if (dataField.getText() != null) {
+            if (dataField.getName().equals("nameField")) {
+                Listeners.nameSurname = dataField.getText();
+                System.out.println("Przed dodaniem nazwiska: " + Listeners.nameSurname);
+            } else if (dataField.getName().equals("collisionField")) {
+                Listeners.collision = dataField.getText();
+                System.out.println("kolizja: " + Listeners.collision);
+            } else {
+                if (Listeners.nameSurname != null)
+                    Listeners.nameSurname = Listeners.nameSurname + " " + dataField.getText();
+                System.out.println("po dodaniu nazwiska: " + Listeners.nameSurname);
+            }
+
+        }
+    }
+}
+
+class ConfirmListener implements ActionListener {
+
+
+    // private SliderListener gaussSliderListener;
+    ConfirmListener() {
+        super();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        Exercise exercise = new Exercise();
+
+        java.util.List<User> users;
+
+
+        exercise.insertUser(Listeners.nameSurname, Listeners.collision, Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        //   exercise.insertUser(Listeners.nameSurname, Listeners.collision, Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        //  exercise.insertUser(Listeners.nameSurname, Listeners.collision, Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+        //   exercise.insertUser(Listeners.nameSurname, Listeners.collision, Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
+
+        users = exercise.selectUsers();
+        System.out.println("Users list: ");
+        for (User c : users)
+            System.out.println(c);
+
+        exercise.closeConnection();
+
+
+    }
 }
 
 class FitListener implements ActionListener {
@@ -36,24 +200,7 @@ class FitListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         Histo.FunctionFitter(Histo.minGaussRange, Histo.maxGaussRange, Histo.minPolyRange, Histo.maxPolyRange);
-        Exercise exercise = new Exercise();
 
-        java.util.List<User> users;
-
-
-        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
-        exercise.insertUser("Piotr Wojtecki", "PbPb-K0", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
-        exercise.insertUser("Abdul Dabdul", "PbPb-Lambda", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
-        exercise.insertUser("Monika Seniut", "Pb-Pb", Histo.getTotal(), Histo.getBackgroundFit(), Histo.getSignal(), Histo.getMean(), Histo.getSigma());
-
-
-        users = exercise.selectUsers();
-        System.out.println("Users list: ");
-        for (User c : users)
-            System.out.println(c);
-
-        exercise.closeConnection();
-        //  JButton fitButton = (JButton) actionEvent.getSource();
     }
 }
 
