@@ -277,35 +277,6 @@ public class Histo extends JFrame implements ActionListener {
         sendResultsToDatabasePanel.setLayout(results_panelLayout);
         fit_panel.setLayout(fit_panelLayout);
 
-//        results_panelLayout.setHorizontalGroup(
-//                results_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-//                        .addGroup(results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                                        .addComponent(finishButton)
-//                                        .addComponent(finishButton)
-//                                        .addComponent(finishButton)
-//                                        .addComponent(finishButton))
-//                                        .addGroup(results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                                        )
-//
-//                        );
-//        results_panelLayout.setVerticalGroup(
-//                results_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-//                        .addGroup(results_panelLayout.createSequentialGroup()
-//                                        .addGap(30, 30, 30)
-//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addGap(30, 30, 30)
-//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addGap(30, 30, 30)
-//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addGap(30, 30, 30)
-//                                        .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-//                                        .addGap(30, 30, 30)
-//
-//                        )
-//
-//
-//        );
-
 
         fit_panel.setLayout(fit_panelLayout);
         fit_panelLayout.setHorizontalGroup(
@@ -321,12 +292,6 @@ public class Histo extends JFrame implements ActionListener {
                                                 .addComponent(finishButton))
                         )
 
-
-//                        .addGroup(fit_panelLayout.createSequentialGroup()
-//                                .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                .addGap(18, 18, 18)
-//                                .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                .addGap(18, 18,18))
 
         );
         fit_panelLayout.setVerticalGroup(
@@ -344,7 +309,7 @@ public class Histo extends JFrame implements ActionListener {
                                         .addComponent(finishButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
                         )
-                //mozna dac do gapow wieksze liczby i wtedy sie rozciagnie cale okno
+                //possible to give bigger numbers to gaps in order to make window wider
 
         );
 
@@ -355,7 +320,7 @@ public class Histo extends JFrame implements ActionListener {
                 jLayeredPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addComponent(load_histo_panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fit_panel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                     //   .addComponent(sendResultsToDatabasePanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+
 
         );
         jLayeredPane2Layout.setVerticalGroup(
@@ -363,12 +328,8 @@ public class Histo extends JFrame implements ActionListener {
                         .addGroup(jLayeredPane2Layout.createSequentialGroup()
                                         .addComponent(load_histo_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                   //     .addComponent(sendResultsToDatabasePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-
                                         .addComponent(fit_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-
                                         .addGap(0, 19, Short.MAX_VALUE)
-//                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
 
                         )
         );
@@ -415,9 +376,6 @@ public class Histo extends JFrame implements ActionListener {
                                         .addComponent(jLayeredPane3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
-//                                        .addComponent(sendResultsToDatabasePanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-//                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-
                                         .addComponent(jLayeredPane1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
@@ -462,9 +420,6 @@ public class Histo extends JFrame implements ActionListener {
                     plot_hist(0.0D, 1.0D, "PbPb-K0.txt", 1450);
                 } else if (s == "PbPb-0-10%") {
                     plot_hist(0.0D, 1.0D, "dataset11.txt", 2600);
-                    //  FunctionFitter(minGaussRange, maxGaussRange, 0.3, 1D);
-
-                    // FunctionFitter(0.487, 0.508, 0.3, 1D);
                 } else if (s == "PbPb-10-20%") {
                     plot_hist(0.0D, 1.0D, "dataset12.txt", 2000);
                 } else if (s == "PbPb-20-30%") {
