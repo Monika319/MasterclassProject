@@ -1,7 +1,4 @@
-
-
 import com.visutools.nav.bislider.BiSlider;
-import com.visutools.nav.bislider.BiSliderListener;
 import hep.aida.IFitResult;
 import hep.aida.IFunction;
 import jhplot.*;
@@ -9,66 +6,47 @@ import org.apache.commons.math3.special.Erf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.StreamTokenizer;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
 
 public class Histo extends JFrame implements ActionListener {
 
 
     public static void main(String args[]) {
-        double wartosc;
         new Histo();
 
     }
 
     private Box.Filler filler1;
-    private JComboBox jComboBox1;
-    private JComboBox jComboBox2;
-    private JComboBox jComboBox4;
-    private JLabel jLabel1;
-    private JLabel jLabel2;
-    private JLabel jLabel3;
+    private JComboBox K0ComboBox;
+    private JComboBox lambdaComboBox;
+    private JComboBox antyLambdaComboBox;
+    private JLabel K0Label;
+    private JLabel lambdaLabel;
+    private JLabel antyLambdaLabel;
     private JLabel bkgLabel;
     private JLabel sigLabel;
     private JLayeredPane jLayeredPane1;
     private JLayeredPane jLayeredPane2;
-    //ivate JLayeredPane jLayeredPane31;
-    private JMenu jMenu1;
-    private JMenu jMenu2;
+    private JMenu fileMenu;
+    private JMenu editMenu;
     private JLayeredPane jLayeredPane3;
-    private JMenuBar jMenuBar1;
-    private JMenuItem jMenuItem1;
-    private JMenuItem jMenuItem2;
-    private JMenuItem jMenuItem3;
-    private JPanel load_histo_panel;
-    private JPanel fit_panel;
+    private JMenuBar jMenuBar;
+    private JMenuItem dataset1;
+    private JMenuItem dataset2;
+    private JMenuItem exit;
+    private JPanel loadHistoPanel;
+    private JPanel fitPanel;
     private JPanel sendResultsToDatabasePanel;
-    private BiSlider bislider;
-    private BiSlider bislider1;
-    private JInternalFrame jInternalFrame1;
-    //  private JTabbedPane jTabbedPane1;
-    //private JTabbedPane jTabbedPane2;
-    // private JTabbedPane jTabbedPane3;
-    private JTabbedPane jTabbedPane4;
-    private JTabbedPane jTabbedPane5;
-    private Container jPanel1;
-    private JPanel jPanel2;
-    // private JDesktopPane jDesktopPane1;
-    // private JTabbedPane jTabbedPane5;
-    //private CheckBoxList list;
-    // private JCheckBox[] boxes;
-    private FileReader fr;
-    private String name;
-    private double wartosc;
+    private BiSlider gaussSlider;
+    private BiSlider polynomialSlider;
+    //    private FileReader fr;
+    private String filename;
     private static HPlot c1;
     private static HFitter polynomialfitter;
     private static HFitter functionFitter;
@@ -79,10 +57,6 @@ public class Histo extends JFrame implements ActionListener {
     private static int BckFit;
     private static double[] Pars;
     static H1D h1;
-    // private JLayeredPane jLayeredPane1;
-    private JTabbedPane jTabbedPane6;
-    private CheckBoxList list2;
-    private JCheckBox[] boxes2;
     public static double minGaussRange;
     public static double maxGaussRange;
     public static double minPolyRange;
@@ -101,7 +75,7 @@ public class Histo extends JFrame implements ActionListener {
 
         initComponents();
 
-        String nazwa = null;
+
         c1 = new HPlot("Canvas", 600, 400);
 
         c1.setLegendFont(new Font("Lucida Sans", 1, 18));
@@ -123,29 +97,29 @@ public class Histo extends JFrame implements ActionListener {
     private void initComponents() {
         jLayeredPane1 = new JLayeredPane();
         jLayeredPane2 = new JLayeredPane();
-        load_histo_panel = new JPanel();
-        jComboBox1 = new JComboBox();
-        jComboBox2 = new JComboBox();
+        loadHistoPanel = new JPanel();
+        K0ComboBox = new JComboBox();
+        lambdaComboBox = new JComboBox();
         filler1 = new Box.Filler(new Dimension(0, 0), new Dimension(0, 0), new Dimension(0, 32767));
-        jLabel1 = new JLabel();
-        jLabel2 = new JLabel();
-        jLabel3 = new JLabel();
+        K0Label = new JLabel();
+        lambdaLabel = new JLabel();
+        antyLambdaLabel = new JLabel();
         bkgLabel = new JLabel("Bkg range:");
         sigLabel = new JLabel("Sig range:");
-        jComboBox4 = new JComboBox();
-        fit_panel = new JPanel();
+        antyLambdaComboBox = new JComboBox();
+        fitPanel = new JPanel();
         sendResultsToDatabasePanel = new JPanel();
         jLayeredPane3 = new JLayeredPane();
-        jMenuBar1 = new JMenuBar();
-        jMenu1 = new JMenu();
-        jMenuItem1 = new JMenuItem();
-        jMenuItem3 = new JMenuItem();
-        jMenuItem2 = new JMenuItem();
-        jMenu2 = new JMenu();
-        bislider = new BiSlider();
-        bislider1 = new BiSlider();
-        bislider.setName("gaussSlider");
-        bislider1.setName("bcgSlider");
+        jMenuBar = new JMenuBar();
+        fileMenu = new JMenu();
+        dataset1 = new JMenuItem();
+        exit = new JMenuItem();
+        dataset2 = new JMenuItem();
+        editMenu = new JMenu();
+        gaussSlider = new BiSlider();
+        polynomialSlider = new BiSlider();
+        gaussSlider.setName("gaussSlider");
+        polynomialSlider.setName("bcgSlider");
         listeners = new Listeners();
         decimalFormat = new DecimalFormat("#.###");
         fitButton = new JButton("Fit signal+background");
@@ -165,144 +139,144 @@ public class Histo extends JFrame implements ActionListener {
                         .addGap(0, 363, Short.MAX_VALUE)
         );
 
-        load_histo_panel.setBorder(BorderFactory.createTitledBorder("V0 histograms"));
+        loadHistoPanel.setBorder(BorderFactory.createTitledBorder("V0 histograms"));
 
 
-        jLabel1.setText("K0");
-        jLabel1.setToolTipText("");
+        K0Label.setText("K0");
+        K0Label.setToolTipText("");
 
-        jLabel2.setText("Lambda");
-        jLabel3.setText("AntiLambda");
+        lambdaLabel.setText("Lambda");
+        antyLambdaLabel.setText("AntiLambda");
 
 
-        jComboBox1.addItem("pp");
-        jComboBox1.addItem("PbPb");
-        jComboBox1.addItem("PbPb-0-10%");
-        jComboBox1.addItem("PbPb-10-20%");
-        jComboBox1.addItem("PbPb-20-30%");
-        jComboBox1.addItem("PbPb-30-40%");
-        jComboBox1.addItem("PbPb-40-50%");
-        jComboBox1.addItem("PbPb-50-60%");
-        jComboBox1.addItem("PbPb-60-70%");
-        jComboBox1.addItem("PbPb-70-80%");
-        jComboBox1.addItem("PbPb-80-90%");
-        jComboBox1.addItem("PbPb-90-100%");
-        jComboBox2.addItem("pp");
-        jComboBox2.addItem("PbPb");
-        jComboBox2.addItem("PbPb-0-10%");
-        jComboBox2.addItem("PbPb-10-20%");
-        jComboBox2.addItem("PbPb-20-30%");
-        jComboBox2.addItem("PbPb-30-40%");
-        jComboBox2.addItem("PbPb-40-50%");
-        jComboBox2.addItem("PbPb-50-60%");
-        jComboBox2.addItem("PbPb-60-70%");
-        jComboBox2.addItem("PbPb-70-80%");
-        jComboBox2.addItem("PbPb-80-90%");
-        jComboBox2.addItem("PbPb-90-100%");
-        jComboBox4.addItem("pp");
-        jComboBox4.addItem("PbPb");
-        jComboBox4.addItem("PbPb-0-10%");
-        jComboBox4.addItem("PbPb-10-20%");
-        jComboBox4.addItem("PbPb-20-30%");
-        jComboBox4.addItem("PbPb-30-40%");
-        jComboBox4.addItem("PbPb-40-50%");
-        jComboBox4.addItem("PbPb-50-60%");
-        jComboBox4.addItem("PbPb-60-70%");
-        jComboBox4.addItem("PbPb-70-80%");
-        jComboBox4.addItem("PbPb-80-90%");
-        jComboBox4.addItem("PbPb-90-100%");
+        K0ComboBox.addItem("pp");
+        K0ComboBox.addItem("PbPb");
+        K0ComboBox.addItem("PbPb-0-10%");
+        K0ComboBox.addItem("PbPb-10-20%");
+        K0ComboBox.addItem("PbPb-20-30%");
+        K0ComboBox.addItem("PbPb-30-40%");
+        K0ComboBox.addItem("PbPb-40-50%");
+        K0ComboBox.addItem("PbPb-50-60%");
+        K0ComboBox.addItem("PbPb-60-70%");
+        K0ComboBox.addItem("PbPb-70-80%");
+        K0ComboBox.addItem("PbPb-80-90%");
+        K0ComboBox.addItem("PbPb-90-100%");
+        lambdaComboBox.addItem("pp");
+        lambdaComboBox.addItem("PbPb");
+        lambdaComboBox.addItem("PbPb-0-10%");
+        lambdaComboBox.addItem("PbPb-10-20%");
+        lambdaComboBox.addItem("PbPb-20-30%");
+        lambdaComboBox.addItem("PbPb-30-40%");
+        lambdaComboBox.addItem("PbPb-40-50%");
+        lambdaComboBox.addItem("PbPb-50-60%");
+        lambdaComboBox.addItem("PbPb-60-70%");
+        lambdaComboBox.addItem("PbPb-70-80%");
+        lambdaComboBox.addItem("PbPb-80-90%");
+        lambdaComboBox.addItem("PbPb-90-100%");
+        antyLambdaComboBox.addItem("pp");
+        antyLambdaComboBox.addItem("PbPb");
+        antyLambdaComboBox.addItem("PbPb-0-10%");
+        antyLambdaComboBox.addItem("PbPb-10-20%");
+        antyLambdaComboBox.addItem("PbPb-20-30%");
+        antyLambdaComboBox.addItem("PbPb-30-40%");
+        antyLambdaComboBox.addItem("PbPb-40-50%");
+        antyLambdaComboBox.addItem("PbPb-50-60%");
+        antyLambdaComboBox.addItem("PbPb-60-70%");
+        antyLambdaComboBox.addItem("PbPb-70-80%");
+        antyLambdaComboBox.addItem("PbPb-80-90%");
+        antyLambdaComboBox.addItem("PbPb-90-100%");
 
-        GroupLayout load_histo_panelLayout = new GroupLayout(load_histo_panel);
-        load_histo_panel.setLayout(load_histo_panelLayout);
-        load_histo_panelLayout.setHorizontalGroup(
-                load_histo_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(load_histo_panelLayout.createSequentialGroup()
+        GroupLayout loadHistoPanelLayout = new GroupLayout(loadHistoPanel);
+        loadHistoPanel.setLayout(loadHistoPanelLayout);
+        loadHistoPanelLayout.setHorizontalGroup(
+                loadHistoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(loadHistoPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(load_histo_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(load_histo_panelLayout.createSequentialGroup()
-                                                .addGroup(load_histo_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel2)
-                                                        .addComponent(jLabel3))
+                                .addGroup(loadHistoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(loadHistoPanelLayout.createSequentialGroup()
+                                                .addGroup(loadHistoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                                        .addComponent(lambdaLabel)
+                                                        .addComponent(antyLambdaLabel))
                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, load_histo_panelLayout.createSequentialGroup()
-                                                .addGroup(load_histo_panelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                                        .addComponent(jComboBox4, GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE)
-                                                        .addComponent(jComboBox2, GroupLayout.Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addComponent(jLabel1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                        .addGroup(GroupLayout.Alignment.LEADING, load_histo_panelLayout.createSequentialGroup()
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loadHistoPanelLayout.createSequentialGroup()
+                                                .addGroup(loadHistoPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                                        .addComponent(antyLambdaComboBox, GroupLayout.Alignment.LEADING, 0, 200, Short.MAX_VALUE)
+                                                        .addComponent(lambdaComboBox, GroupLayout.Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(K0Label, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addGroup(GroupLayout.Alignment.LEADING, loadHistoPanelLayout.createSequentialGroup()
                                                                 .addComponent(filler1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                                 .addGap(0, 0, Short.MAX_VALUE))
-                                                        .addComponent(jComboBox1, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addComponent(K0ComboBox, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addContainerGap())))
         );
-        load_histo_panelLayout.setVerticalGroup(
-                load_histo_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(load_histo_panelLayout.createSequentialGroup()
+        loadHistoPanelLayout.setVerticalGroup(
+                loadHistoPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(loadHistoPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 9, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(K0Label, GroupLayout.PREFERRED_SIZE, 9, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(K0ComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel2)
+                                .addComponent(lambdaLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lambdaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel3)
+                                .addComponent(antyLambdaLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(antyLambdaComboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(filler1, GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        fit_panel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
+        fitPanel.setBorder(BorderFactory.createTitledBorder("Fitting panel"));
         sendResultsToDatabasePanel.setBorder(BorderFactory.createTitledBorder("Send to database panel"));
-        bislider.setMinimumColor(Color.green);
-        bislider.setMaximumValue(2D);
-        bislider.setDecimalFormater(new DecimalFormat("#.###"));
-        bislider.setVisible(true);
+        gaussSlider.setMinimumColor(Color.green);
+        gaussSlider.setMaximumValue(2D);
+        gaussSlider.setDecimalFormater(new DecimalFormat("#.###"));
+        gaussSlider.setVisible(true);
 
-        // bislider.addBiSliderListener(listeners.sliderListener);
-        bislider.addBiSliderListener(listeners.sliderListener);
+        // gaussSlider.addBiSliderListener(listeners.sliderListener);
+        gaussSlider.addBiSliderListener(listeners.sliderListener);
         fitButton.addActionListener(listeners.fitListener);
         finishButton.addActionListener(listeners.finishListener);
 
-        bislider1.setMinimumColor(Color.blue);
-        bislider1.setMaximumValue(2D);
-        bislider1.setDecimalFormater(new DecimalFormat("#.###"));
-        bislider1.addBiSliderListener(listeners.sliderListener);
-        bislider1.setVisible(true);
-        GroupLayout fit_panelLayout = new GroupLayout(fit_panel);
+        polynomialSlider.setMinimumColor(Color.blue);
+        polynomialSlider.setMaximumValue(2D);
+        polynomialSlider.setDecimalFormater(new DecimalFormat("#.###"));
+        polynomialSlider.addBiSliderListener(listeners.sliderListener);
+        polynomialSlider.setVisible(true);
+        GroupLayout fitPanelLayout = new GroupLayout(fitPanel);
         GroupLayout results_panelLayout = new GroupLayout(sendResultsToDatabasePanel);
         sendResultsToDatabasePanel.setLayout(results_panelLayout);
-        fit_panel.setLayout(fit_panelLayout);
+        fitPanel.setLayout(fitPanelLayout);
 
 
-        fit_panel.setLayout(fit_panelLayout);
-        fit_panelLayout.setHorizontalGroup(
-                fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
-                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+        fitPanel.setLayout(fitPanelLayout);
+        fitPanelLayout.setHorizontalGroup(
+                fitPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                        .addGroup(fitPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(sigLabel)
-                                .addComponent(bislider)
+                                .addComponent(gaussSlider)
                                 .addComponent(bkgLabel)
-                                .addComponent(bislider1))
-                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                .addComponent(polynomialSlider))
+                        .addGroup(fitPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                         .addComponent(fitButton)
-                                        .addGroup(fit_panelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
+                                        .addGroup(fitPanelLayout.createParallelGroup(GroupLayout.Alignment.CENTER)
                                                 .addComponent(finishButton))
                         )
 
 
         );
-        fit_panelLayout.setVerticalGroup(
-                fit_panelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(fit_panelLayout.createSequentialGroup()
+        fitPanelLayout.setVerticalGroup(
+                fitPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(fitPanelLayout.createSequentialGroup()
                                         .addGap(30, 30, 30)
                                         .addComponent(sigLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bislider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gaussSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
                                         .addComponent(bkgLabel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(bislider1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(polynomialSlider, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
                                         .addComponent(fitButton, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addGap(30, 30, 30)
@@ -318,24 +292,24 @@ public class Histo extends JFrame implements ActionListener {
         jLayeredPane2.setLayout(jLayeredPane2Layout);
         jLayeredPane2Layout.setHorizontalGroup(
                 jLayeredPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(load_histo_panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(fit_panel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(loadHistoPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(fitPanel, GroupLayout.Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 
 
         );
         jLayeredPane2Layout.setVerticalGroup(
                 jLayeredPane2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(jLayeredPane2Layout.createSequentialGroup()
-                                        .addComponent(load_histo_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(loadHistoPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(fit_panel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(fitPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 19, Short.MAX_VALUE)
 
                         )
         );
-        jLayeredPane2.setLayer(load_histo_panel, JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(loadHistoPanel, JLayeredPane.DEFAULT_LAYER);
         jLayeredPane2.setLayer(sendResultsToDatabasePanel, JLayeredPane.DEFAULT_LAYER);
-        jLayeredPane2.setLayer(fit_panel, JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane2.setLayer(fitPanel, JLayeredPane.DEFAULT_LAYER);
 
         GroupLayout jLayeredPane3Layout = new GroupLayout(jLayeredPane3);
         jLayeredPane3.setLayout(jLayeredPane3Layout);
@@ -347,23 +321,24 @@ public class Histo extends JFrame implements ActionListener {
                 jLayeredPane3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGap(0, 0, Short.MAX_VALUE)
         );
-        jMenu1.setText("File");
+        fileMenu.setText("File");
 
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        dataset1.setText("Dataset1");
+        fileMenu.add(dataset1);
 
-        jMenuItem3.setText("jMenuItem3");
-        jMenu1.add(jMenuItem3);
 
-        jMenuItem2.setText("jMenuItem2");
-        jMenu1.add(jMenuItem2);
+        dataset2.setText("Dataset2");
+        fileMenu.add(dataset2);
 
-        jMenuBar1.add(jMenu1);
+        exit.setText("Exit");
+        fileMenu.add(exit);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        jMenuBar.add(fileMenu);
 
-        setJMenuBar(jMenuBar1);
+        editMenu.setText("Edit");
+        jMenuBar.add(editMenu);
+
+        setJMenuBar(jMenuBar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -407,110 +382,110 @@ public class Histo extends JFrame implements ActionListener {
 
     public void read() {
         int i;
-        jComboBox1.addActionListener(new ActionListener() {
+        K0ComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                jComboBox1 = (JComboBox) e.getSource();
-                String s = (String) jComboBox1.getSelectedItem();
+                K0ComboBox = (JComboBox) e.getSource();
+                String s = (String) K0ComboBox.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp") {
+                if (s.equals("pp")) {
                     plot_hist(0.0D, 1.0D, "pp-K0.txt", 110);
-                } else if (s == "PbPb") {
+                } else if (s.equals("PbPb")) {
                     plot_hist(0.0D, 1.0D, "PbPb-K0.txt", 1450);
-                } else if (s == "PbPb-0-10%") {
+                } else if (s.equals("PbPb-0-10%")) {
                     plot_hist(0.0D, 1.0D, "dataset11.txt", 2600);
-                } else if (s == "PbPb-10-20%") {
+                } else if (s.equals("PbPb-10-20%")) {
                     plot_hist(0.0D, 1.0D, "dataset12.txt", 2000);
-                } else if (s == "PbPb-20-30%") {
+                } else if (s.equals("PbPb-20-30%")) {
                     plot_hist(0.0D, 1.0D, "dataset13.txt", 1400);
-                } else if (s == "PbPb-30-40%") {
+                } else if (s.equals("PbPb-30-40%")) {
                     plot_hist(0.0D, 1.0D, "dataset14.txt", 850);
-                } else if (s == "PbPb-40-50%") {
+                } else if (s.equals("PbPb-40-50%")) {
                     plot_hist(0.0D, 1.0D, "dataset15.txt", 420);
-                } else if (s == "PbPb-50-60%") {
+                } else if (s.equals("PbPb-50-60%")) {
                     plot_hist(0.0D, 1.0D, "dataset16.txt", 220);
-                } else if (s == "PbPb-60-70%") {
+                } else if (s.equals("PbPb-60-70%")) {
                     plot_hist(0.0D, 1.0D, "dataset17.txt", 140);
-                } else if (s == "PbPb-70-80%") {
+                } else if (s.equals("PbPb-70-80%")) {
                     plot_hist(0.0D, 1.0D, "dataset18.txt", 60);
-                } else if (s == "PbPb-80-90%") {
+                } else if (s.equals("PbPb-80-90%")) {
                     plot_hist(0.0D, 1.0D, "dataset19.txt", 35);
-                } else if (s == "PbPb-90-100%") {
+                } else if (s.equals("PbPb-90-100%")) {
                     plot_hist(0.0D, 1.0D, "dataset20.txt", 2.2);
                 }
             }
         });
 
-        jComboBox2.addActionListener(new ActionListener() {
+        lambdaComboBox.addActionListener(new ActionListener() {
 
 
             public void actionPerformed(ActionEvent e) {
-                jComboBox2 = (JComboBox) e.getSource();
-                String s = (String) jComboBox2.getSelectedItem();
+                lambdaComboBox = (JComboBox) e.getSource();
+                String s = (String) lambdaComboBox.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp") {
+                if (s.equals("pp")) {
                     plot_hist(1.0D, 2.0D, "pp-Lambda.txt", 150);
-                } else if (s == "PbPb") {
+                } else if (s.equals("PbPb")) {
                     plot_hist(1.0D, 2.0D, "PbPb-Lambda.txt", 820);
-                } else if (s == "PbPb-0-10%") {
+                } else if (s.equals("PbPb-0-10%")) {
                     plot_hist(1.0D, 2.0D, "dataset21.txt", 1200);
-                } else if (s == "PbPb-10-20%") {
+                } else if (s.equals("PbPb-10-20%")) {
                     plot_hist(1.0D, 2.0D, "dataset22.txt", 1150);
-                } else if (s == "PbPb-20-30%") {
+                } else if (s.equals("PbPb-20-30%")) {
                     plot_hist(1.0D, 2.0D, "dataset23.txt", 850);
-                } else if (s == "PbPb-30-40%") {
+                } else if (s.equals("PbPb-30-40%")) {
                     plot_hist(1.0D, 2.0D, "dataset24.txt", 500);
-                } else if (s == "PbPb-40-50%") {
+                } else if (s.equals("PbPb-40-50%")) {
                     plot_hist(1.0D, 2.0D, "dataset25.txt", 300);
-                } else if (s == "PbPb-50-60%") {
+                } else if (s.equals("PbPb-50-60%")) {
                     plot_hist(1.0D, 2.0D, "dataset26.txt", 150);
-                } else if (s == "PbPb-60-70%") {
+                } else if (s.equals("PbPb-60-70%")) {
                     plot_hist(1.0D, 2.0D, "dataset27.txt", 60);
-                } else if (s == "PbPb-70-80%") {
+                } else if (s.equals("PbPb-70-80%")) {
                     plot_hist(1.0D, 2.0D, "dataset28.txt", 35);
-                } else if (s == "PbPb-80-90%") {
+                } else if (s.equals("PbPb-80-90%")) {
                     plot_hist(1.0D, 2.0D, "dataset29.txt", 10);
-                } else if (s == "PbPb-90-100%") {
+                } else if (s.equals("PbPb-90-100%")) {
                     plot_hist(1.0D, 2.0D, "dataset30.txt", 8);
                 }
             }
         });
 
-        jComboBox4.addActionListener(new ActionListener() {
+        antyLambdaComboBox.addActionListener(new ActionListener() {
 
 
             public void actionPerformed(ActionEvent e) {
-                jComboBox4 = (JComboBox) e.getSource();
-                String s = (String) jComboBox4.getSelectedItem();
+                antyLambdaComboBox = (JComboBox) e.getSource();
+                String s = (String) antyLambdaComboBox.getSelectedItem();
 
                 System.out.print(s);
 
-                if (s == "pp") {
+                if (s.equals("pp")) {
                     plot_hist(1.0D, 2.0D, "pp-AntiLambda.txt", 60);
-                } else if (s == "PbPb") {
+                } else if (s.equals("PbPb")) {
                     plot_hist(1.0D, 2.0D, "PbPb-AntiLambda.txt", 800);
-                } else if (s == "PbPb-0-10%") {
+                } else if (s.equals("PbPb-0-10%")) {
                     plot_hist(1.0D, 2.0D, "dataset31.txt", 1150);
-                } else if (s == "PbPb-10-20%") {
+                } else if (s.equals("PbPb-10-20%")) {
                     plot_hist(1.0D, 2.0D, "dataset32.txt", 1100);
-                } else if (s == "PbPb-20-30%") {
+                } else if (s.equals("PbPb-20-30%")) {
                     plot_hist(1.0D, 2.0D, "dataset33.txt", 800);
-                } else if (s == "PbPb-30-40%") {
+                } else if (s.equals("PbPb-30-40%")) {
                     plot_hist(1.0D, 2.0D, "dataset34.txt", 450);
-                } else if (s == "PbPb-40-50%") {
+                } else if (s.equals("PbPb-40-50%")) {
                     plot_hist(1.0D, 2.0D, "dataset35.txt", 270);
-                } else if (s == "PbPb-50-60%") {
+                } else if (s.equals("PbPb-50-60%")) {
                     plot_hist(1.0D, 2.0D, "dataset36.txt", 130);
-                } else if (s == "PbPb-60-70%") {
+                } else if (s.equals("PbPb-60-70%")) {
                     plot_hist(1.0D, 2.0D, "dataset37.txt", 70);
-                } else if (s == "PbPb-70-80%") {
+                } else if (s.equals("PbPb-70-80%")) {
                     plot_hist(1.0D, 2.0D, "dataset38.txt", 25);
-                } else if (s == "PbPb-80-90%") {
+                } else if (s.equals("PbPb-80-90%")) {
                     plot_hist(1.0D, 2.0D, "dataset39.txt", 8);
-                } else if (s == "PbPb-90-100%") {
+                } else if (s.equals("PbPb-90-100%")) {
                     plot_hist(1.0D, 2.0D, "dataset40.txt", 1.2);
                 }
             }
@@ -519,8 +494,8 @@ public class Histo extends JFrame implements ActionListener {
     }
 
 
-    public void plot_hist(double xminrange, double xmaxrange, String fileName, double yAxisMax) {
-        name = fileName;
+    public void plot_hist(double xMinRange, double xMaxRange, String fileName, double yAxisMax) {
+        filename = fileName;
 
 
         c1.clearData();
@@ -575,7 +550,7 @@ public class Histo extends JFrame implements ActionListener {
 //            System.exit(3);
 //        }
 
-        h1 = list_data.getH1D(400, xminrange, xmaxrange);
+        h1 = list_data.getH1D(400, xMinRange, xMaxRange);
 
         // H1D h1 = new H1D("Histogram", 100, minx, maxx);
 
@@ -613,7 +588,7 @@ public class Histo extends JFrame implements ActionListener {
 //		this.c1.setNameY("Counts");
 //		this.c1.setName("Invariant Mass spectra");
         this.c1.setGTitle("Invariant Mass Distribution");
-        this.c1.setRange(xminrange, xmaxrange, 0, yAxisMax);
+        this.c1.setRange(xMinRange, xMaxRange, 0, yAxisMax);
         //this.c1.setTicLabels(true);
         this.c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
         this.c1.draw(h1);
@@ -622,12 +597,9 @@ public class Histo extends JFrame implements ActionListener {
 
     }
 
-    static void FunctionFitter(double minGaus, double maxGaus, double minPoly,
+    static void FunctionFitter(double minGauss, double maxGaus, double minPoly,
                                double maxPoly) {
 
-//        if (fFitGaus!=null){
-//            c1.d
-//        }
         if (fFitGaus != null) {
             c1.clearAllData();
             c1.draw(h1);
@@ -640,13 +612,13 @@ public class Histo extends JFrame implements ActionListener {
         functionFitter
                 .setFunc("fitGaus", 1, "a* exp(-0.5*((x[0]-mean)/s0)*((x[0]-mean)/s0))+p2*x[0]*x[0]+p1*x[0]+p0", "a,mean,s0,p2,p1,p0");
         functionFitter.setPar("a", 80D);
-        functionFitter.setPar("mean", 0.5 * (minGaus + maxGaus));// 0.5*(fitrangegaus.min+fitrangegaus.max)
+        functionFitter.setPar("mean", 0.5 * (minGauss + maxGaus));// 0.5*(fitrangegaus.min+fitrangegaus.max)
         functionFitter.setPar("s0", 0.01);
         functionFitter.setRange(minPoly, maxPoly);// tutaj daję range
         // najmniejszy-największy
         functionFitter.setParRange("a", 0D, Math.pow(10, 9));
-        functionFitter.setParRange("mean", minGaus, maxGaus);
-        functionFitter.setParRange("s0", 0D, (maxGaus - minGaus) / 2D);
+        functionFitter.setParRange("mean", minGauss, maxGaus);
+        functionFitter.setParRange("s0", 0D, (maxGaus - minGauss) / 2D);
 
         functionFitter.fit(h1);
 
@@ -667,26 +639,26 @@ public class Histo extends JFrame implements ActionListener {
 
         IFunction ffp = polynomialfitter.getFittedFunc();
 
-        fFitGaus = new F1D("Gauss", ff, minGaus, maxGaus);
+        fFitGaus = new F1D("Gauss", ff, minGauss, maxGaus);
         fFitPolynomial = new F1D("Poly", ffp, minPoly, maxPoly);
         fFitGaus.setColor(Color.green);
         fFitGaus.setPenWidth(3);
         fFitPolynomial.setColor(Color.blue);
         fFitPolynomial.setPenWidth(3);
 
-        BckFit = (int) (BackgroundIntegral(minGaus, maxGaus) / (h1.binLowerEdge(1) - h1.binLowerEdge(0)));
+        BckFit = (int) (BackgroundIntegral(minGauss, maxGaus) / (h1.binLowerEdge(1) - h1.binLowerEdge(0)));
         System.out.println("BckFit: " + Integer.toString(BckFit));
 
         c1.draw(fFitPolynomial);
         c1.draw(fFitGaus);
 
-        double errorFuntion1 = Erf.erf((minGaus - Pars[1]) / (Pars[2] * Math.sqrt(2)));
+        double errorFuntion1 = Erf.erf((minGauss - Pars[1]) / (Pars[2] * Math.sqrt(2)));
         double errorFuntion2 = Erf.erf((maxGaus - Pars[1]) / (Pars[2] * Math.sqrt(2)));
         signalFit = (int) (Math.sqrt(Math.PI / 2.) * Pars[0] * Pars[2] * (errorFuntion2 - errorFuntion1) / (h1.binLowerEdge(1) - h1
                 .binLowerEdge(0)));
         TotalFit = (signalFit + BckFit);
 
-        fFitGaus.eval(minGaus, maxGaus);
+        fFitGaus.eval(minGauss, maxGaus);
 
         System.out.println("signalfit " + signalFit);
         System.out.println("totalfit " + TotalFit);
@@ -718,7 +690,6 @@ public class Histo extends JFrame implements ActionListener {
     }
 
     private static final long serialVersionUID = 1L;
-    // JButton button;
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -769,49 +740,30 @@ public class Histo extends JFrame implements ActionListener {
     }
 
 
-    public double getMinGaussRange() {
+    public double getminGaussRange() {
         return minGaussRange;
     }
 
     public static void setMinGaussRange(double min) {
-//        DecimalFormat df = new DecimalFormat("#.###");
-//        minGaussRange = Double.parseDouble(df.format(min));
-        //   minGaussRange=min;
         minGaussRange = new BigDecimal(min).setScale(3, RoundingMode.HALF_UP).doubleValue();
-
-
-        // minGaussRange = Double.parseDouble(decimalFormat.format(min));
         System.out.println(minGaussRange);
 
     }
 
     public static void setMaxGaussRange(double max) {
-        // maxGaussRange=max;
+
         maxGaussRange = new BigDecimal(max).setScale(3, RoundingMode.HALF_UP).doubleValue();
-//        DecimalFormat df = new DecimalFormat("#.###");
-//        minGaussRange = Double.parseDouble(df.format(max));
-        //  maxGaussRange = Double.parseDouble(decimalFormat.format(max));
         System.out.println(maxGaussRange);
     }
 
     public static void setMinPolyRange(double min) {
-//        DecimalFormat df = new DecimalFormat("#.###");
-//        minGaussRange = Double.parseDouble(df.format(min));
-        //   minGaussRange=min;
         minPolyRange = new BigDecimal(min).setScale(3, RoundingMode.HALF_UP).doubleValue();
-
-
-        // minGaussRange = Double.parseDouble(decimalFormat.format(min));
         System.out.println(minPolyRange);
 
     }
 
     public static void setMaxPolyRange(double max) {
-        // maxGaussRange=max;
         maxPolyRange = new BigDecimal(max).setScale(3, RoundingMode.HALF_UP).doubleValue();
-//        DecimalFormat df = new DecimalFormat("#.###");
-//        minGaussRange = Double.parseDouble(df.format(max));
-        //  maxGaussRange = Double.parseDouble(decimalFormat.format(max));
         System.out.println(maxPolyRange);
     }
 }

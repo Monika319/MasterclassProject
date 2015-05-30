@@ -6,11 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 
 
 /**
@@ -167,8 +162,6 @@ class GetDataListener implements ActionListener {
 
 class ConfirmListener implements ActionListener {
 
-
-    // private SliderListener gaussSliderListener;
     ConfirmListener() {
         super();
     }
@@ -200,8 +193,6 @@ class ConfirmListener implements ActionListener {
 
 class FitListener implements ActionListener {
 
-
-    // private SliderListener gaussSliderListener;
     FitListener() {
         super();
     }

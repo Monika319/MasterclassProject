@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,12 +36,8 @@ public class Exercise {
 
     public boolean createTables() {
         String createUsers = "CREATE TABLE IF NOT EXISTS users(nameSurname varchar(255) , collision varchar(255) , total varchar(255), background varchar(255),signal varchar(255),mean varchar(255),sigma varchar(255),PRIMARY KEY(nameSurname,collision))";
-//        String createDatasets = "CREATE TABLE IF NOT EXISTS datasets (id_dataset INTEGER PRIMARY KEY AUTOINCREMENT, collision varchar(255), gaussParameters varchar(255), polynomialParameters varchar(255))";
-//        String createResults = "CREATE TABLE IF NOT EXISTS results (id_result INTEGER PRIMARY KEY AUTOINCREMENT, id_user int, id_dataset int)";
         try {
             stat.execute(createUsers);
-//            stat.execute(createDatasets);
-//            stat.execute(createResults);
         } catch (SQLException e) {
             System.err.println("Table creating error");
             e.printStackTrace();
@@ -75,10 +70,11 @@ public class Exercise {
     public List<User> selectUsers() {
         List<User> users = new LinkedList<User>();
         try {
-            ResultSet result = stat.executeQuery("SELECT * FROM users");
+            String selectStatement = "SELECT * FROM users ";
+            PreparedStatement prepStmt = conn.prepareStatement(selectStatement);
+            ResultSet result = prepStmt.executeQuery();
             String nameSurname, collision, total, background, signal, mean, sigma;
             while (result.next()) {
-                // id = result.getInt("id_user");
                 nameSurname = result.getString("nameSurname");
                 collision = result.getString("collision");
                 total = result.getString("total");
@@ -100,19 +96,14 @@ public class Exercise {
         List<User> users = new LinkedList<User>();
         try {
             ResultSet result = stat.executeQuery("DELETE FROM users");
-            int id;
-            String name, surname;
             while (result.next()) {
-//                id = result.getInt("id_user");
-//                name = result.getString("name");
-//                surname = result.getString("surname");
                 users.clear();
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            // return null;
+
         }
-        //  return users;
+
     }
 
 

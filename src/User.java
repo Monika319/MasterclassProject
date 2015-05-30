@@ -3,7 +3,6 @@
  */
 public class User {
 
-    //private int id;
     private String nameSurname;
     private String collision;
     private String gaussParameters;
@@ -13,6 +12,9 @@ public class User {
     private String signal;
     private String mean;
     private String sigma;
+
+    public User() {
+    }
 
     public String getTotal() {
         return total;
@@ -87,8 +89,6 @@ public class User {
         this.polynomialParameters = polynomialParameters;
     }
 
-    public User() {
-    }
 
     public User(String nameSurname, String collision, String total, String background, String signal, String mean, String sigma) {
         this.nameSurname = nameSurname;
