@@ -13,12 +13,14 @@
       <root url="jar://$USER_HOME$/Downloads/openide-lookup-1.9-patched-1.0.jar!/" />
       <root url="jar://$USER_HOME$/Downloads/org-openide-util-lookup.jar!/" />
       <root url="file://$USER_HOME$/Downloads/commons-math3-3.5" />
+      <root url="jar://$USER_HOME$/Downloads/bislider1.5.2.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="file://$USER_HOME$/Downloads/commons-math3-3.5/docs/apidocs" />
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/Downloads/org-openide-util-lookup-7.3-sources.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/bislider1.5.2.jar!/" />
     </SOURCES>
     <jarDirectory url="file://$USER_HOME$/Downloads/commons-math3-3.5" recursive="false" />
   </library>
