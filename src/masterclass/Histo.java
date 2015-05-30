@@ -9,8 +9,7 @@ import org.apache.commons.math3.special.Erf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -25,6 +24,7 @@ public class Histo extends JFrame implements ActionListener {
 
 
     public static void main(String args[]) {
+
         new Histo();
 
     }
@@ -103,6 +103,18 @@ public class Histo extends JFrame implements ActionListener {
      * Initializes JFrame components.
      */
     private void initComponents() {
+        WindowListener exitListener = new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int confirm = JOptionPane.showOptionDialog(null, "Are You Sure to Close Application?", "Exit Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.exit(0);
+                } else
+                    setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+            }
+        };
+        this.addWindowListener(exitListener);
         jLayeredPane1 = new JLayeredPane();
         jLayeredPane2 = new JLayeredPane();
         loadHistoPanel = new JPanel();
@@ -135,6 +147,7 @@ public class Histo extends JFrame implements ActionListener {
 
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
 
         GroupLayout jLayeredPane1Layout = new GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -610,6 +623,7 @@ public class Histo extends JFrame implements ActionListener {
         this.c1.refreshFrame();
 
     }
+
     /**
      * Fits polynomial and gauss functions for selected dataset and fitting function's ranges.
      */
@@ -779,6 +793,7 @@ public class Histo extends JFrame implements ActionListener {
         maxGaussRange = new BigDecimal(max).setScale(3, RoundingMode.HALF_UP).doubleValue();
         System.out.println(maxGaussRange);
     }
+
     /**
      * Sets minimum range for Polynomial fitting function.
      */
@@ -787,6 +802,7 @@ public class Histo extends JFrame implements ActionListener {
         System.out.println(minPolyRange);
 
     }
+
     /**
      * Sets maximum range for Polynomial fitting function.
      */
