@@ -234,7 +234,6 @@ class SliderListener implements BiSliderListener {
     public void newValues(BiSliderEvent biSliderEvent) {
         BiSlider slider = (BiSlider) biSliderEvent.getSource();
         String name = slider.getName();
-        System.out.println("jaki to slider: " + name);
         min = slider.getMinimumColoredValue();
         max = slider.getMaximumColoredValue();
         if (name.equals("gaussSlider")) {

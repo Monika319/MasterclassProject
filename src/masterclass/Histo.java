@@ -87,11 +87,11 @@ public class Histo extends JFrame implements ActionListener {
 
         c1.setLegendFont(new Font("Lucida Sans", 1, 18));
         // this.c1.getAntiAlias();
-        this.c1.setGTitle("Invariant Mass Distribution");
+        c1.setGTitle("Invariant Mass Distribution");
         // this.c1.setAutoRange();
-        this.c1.setNameX("Invariant Mass[GeV]");
-        this.c1.setNameY("Counts");
-        this.c1.setName("Invariant Mass spectra");
+        c1.setNameX("Invariant Mass[GeV]");
+        c1.setNameY("Counts");
+        c1.setName("Invariant Mass spectra");
         jLayeredPane3.add(c1.getCanvasPanel());
         // jTabbedPane5.addTab("Invariant Mass", c1.getCanvasPanel());
 
@@ -614,13 +614,13 @@ public class Histo extends JFrame implements ActionListener {
 //		this.c1.setNameX("Invariant Mass[GeV]");
 //		this.c1.setNameY("Counts");
 //		this.c1.setName("Invariant Mass spectra");
-        this.c1.setGTitle("Invariant Mass Distribution");
-        this.c1.setRange(xMinRange, xMaxRange, 0, yAxisMax);
+        c1.setGTitle("Invariant Mass Distribution");
+        c1.setRange(xMinRange, xMaxRange, 0, yAxisMax);
         //this.c1.setTicLabels(true);
-        this.c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
-        this.c1.draw(h1);
-        this.c1.drawStatBox(h1, 300, 50);
-        this.c1.refreshFrame();
+        c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
+        c1.draw(h1);
+        c1.drawStatBox(h1, 300, 50);
+        c1.refreshFrame();
 
     }
 
@@ -659,7 +659,6 @@ public class Histo extends JFrame implements ActionListener {
         System.out.println("Fitted parameters: " + Arrays.toString(r.fittedParameters()));
 
         polynomialfitter.setFunc("fitPoly", 1, "p2*x[0]*x[0]+p1*x[0]+p0", "p2,p1,p0");
-        ;
         polynomialfitter.setPar("p2", Pars[3]);
         polynomialfitter.setPar("p1", Pars[4]);
         polynomialfitter.setPar("p0", Pars[5]);
