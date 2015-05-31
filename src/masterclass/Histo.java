@@ -83,11 +83,17 @@ public class Histo extends JFrame implements ActionListener {
         initComponents();
 
 
-        c1 = new HPlot("Canvas", 600, 400);
+        c1 = new HPlot("Canvas", 800, 576);
 
+        c1.setTicsMirror(false);
         c1.setLegendFont(new Font("Lucida Sans", 1, 18));
         // this.c1.getAntiAlias();
         c1.setGTitle("Invariant Mass Distribution");
+        c1.setSubTicNumber(0, 25);
+        c1.setSubTicNumber(1, 15);
+        c1.setTicLabels(0,true);
+
+        c1.setTicColor(Color.BLACK);
         // this.c1.setAutoRange();
         c1.setNameX("Invariant Mass[GeV]");
         c1.setNameY("Counts");
@@ -336,7 +342,7 @@ public class Histo extends JFrame implements ActionListener {
         jLayeredPane3.setLayout(jLayeredPane3Layout);
         jLayeredPane3Layout.setHorizontalGroup(
                 jLayeredPane3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGap(0, 569, Short.MAX_VALUE)
+                        .addGap(0, 800, Short.MAX_VALUE)
         );
         jLayeredPane3Layout.setVerticalGroup(
                 jLayeredPane3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -528,23 +534,7 @@ public class Histo extends JFrame implements ActionListener {
         c1.clearData();
         c1.clearAllLabels();
 
-        // c1.setGrid(getY(), true);
-        int number = c1.getNumberOfTics(getY());
-        //c1.setNumberOfTics(MAXIMIZED_VERT, 5);
-        //	c1.setTicLength(getY(), 50D);
-        //	c1.setTextRotationLeft(90);
-        System.out.println(Integer.toString(number));
-        //this.c1.setMarginSizeLeft(0.1);
-//		this.c1.setNumberOfTics(1, 100);
-//		this.c1.setTicsRotate(getY(), true);
-//		c1.setTextPosTopY(0.01);
-//		c1.getTextPosLeftY();
-//		c1.getCdY();
-        //c1.setMarginSizeLeft(0.3);
-        //c1.setAttResizableAll(true);
 
-        //	c1.setLegend(false);
-        // c1.clearData();
         //try {
 //            fr = new FileReader(name);
 //        } catch (FileNotFoundException e) {
@@ -619,7 +609,10 @@ public class Histo extends JFrame implements ActionListener {
         //this.c1.setTicLabels(true);
         c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
         c1.draw(h1);
-        c1.drawStatBox(h1, 300, 50);
+        c1.drawStatBox(h1, 550, 50);
+        c1.setSubTicNumber(0, 25);
+        c1.setSubTicNumber(1, 15);
+        c1.setTicLabels(0, true);
         c1.refreshFrame();
 
     }
@@ -676,7 +669,9 @@ public class Histo extends JFrame implements ActionListener {
 
         BckFit = (int) (BackgroundIntegral(minGauss, maxGaus) / (h1.binLowerEdge(1) - h1.binLowerEdge(0)));
         System.out.println("BckFit: " + Integer.toString(BckFit));
-
+        c1.setSubTicNumber(0, 25);
+        c1.setSubTicNumber(1, 15);
+        c1.setTicLabels(0, true);
         c1.draw(fFitPolynomial);
         c1.draw(fFitGaus);
 
@@ -700,7 +695,10 @@ public class Histo extends JFrame implements ActionListener {
         parsData = new String[]{"Total:" + TotalFit, "Background:" + BckFit, "Signal:" + signalFit,
                 "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.),
                 "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.)};
+      //  c1.setLegendPos(0,500);
+        c1.setTicsMirror(false);
         c1.drawTextBox(parsData);
+
         total = "Total:" + TotalFit;
         backgroundFit = " Background:" + BckFit;
         signal = " Signal:" + signalFit;
