@@ -84,22 +84,19 @@ public class Histo extends JFrame implements ActionListener {
 
 
         c1 = new HPlot("Canvas", 800, 576);
-
+        c1.setNameX("Invariant mass [GeV/c\u00B2]");
+        c1.setNameY("Counts");
         c1.setTicsMirror(false);
-        c1.setLegendFont(new Font("Lucida Sans", 1, 18));
-        // this.c1.getAntiAlias();
+        c1.setLegendFont(new Font("Comic Sans", 1, 14));
         c1.setGTitle("Invariant Mass Distribution");
         c1.setSubTicNumber(0, 25);
         c1.setSubTicNumber(1, 15);
-        c1.setTicLabels(0,true);
+        c1.setTicLabels(0, true);
 
         c1.setTicColor(Color.BLACK);
-        // this.c1.setAutoRange();
-        c1.setNameX("Invariant Mass[GeV]");
-        c1.setNameY("Counts");
-        c1.setName("Invariant Mass spectra");
+        // c1.setName("Invariant Mass spectra");
         jLayeredPane3.add(c1.getCanvasPanel());
-        // jTabbedPane5.addTab("Invariant Mass", c1.getCanvasPanel());
+
 
         read();
         setVisible(true);
@@ -608,8 +605,12 @@ public class Histo extends JFrame implements ActionListener {
         c1.setRange(xMinRange, xMaxRange, 0, yAxisMax);
         //this.c1.setTicLabels(true);
         c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
+        c1.setLegendFont(new Font("Comic Sans", 1, 14));
         c1.draw(h1);
-        c1.drawStatBox(h1, 550, 50);
+        c1.setNameX("Invariant mass [GeV/c\u00B2]");
+        c1.setNameY("Counts");
+        c1.setNameYpos(LEFT_ALIGNMENT, CENTER_ALIGNMENT);
+        c1.drawStatBox(h1, 500, 50);
         c1.setSubTicNumber(0, 25);
         c1.setSubTicNumber(1, 15);
         c1.setTicLabels(0, true);
@@ -672,8 +673,16 @@ public class Histo extends JFrame implements ActionListener {
         c1.setSubTicNumber(0, 25);
         c1.setSubTicNumber(1, 15);
         c1.setTicLabels(0, true);
+        c1.setLegendPos(WIDTH, HIDE_ON_CLOSE);
+        c1.setLegendFont(new Font("Comic Sans", 1, 14));
         c1.draw(fFitPolynomial);
         c1.draw(fFitGaus);
+        c1.setNameX("Invariant mass [GeV/c\u00B2]");
+        c1.setNameXpos(RIGHT_ALIGNMENT, RIGHT_ALIGNMENT);
+        //   c1.setNameYpos(CENTER_ALIGNMENT,CENTER_ALIGNMENT);
+        c1.setNameYpos(LEFT_ALIGNMENT, CENTER_ALIGNMENT);
+        // c1.setNameYpos(30D,300D);
+        c1.setNameY("Counts");
 
         double errorFuntion1 = Erf.erf((minGauss - Pars[1]) / (Pars[2] * Math.sqrt(2)));
         double errorFuntion2 = Erf.erf((maxGaus - Pars[1]) / (Pars[2] * Math.sqrt(2)));
@@ -695,10 +704,12 @@ public class Histo extends JFrame implements ActionListener {
         parsData = new String[]{"Total:" + TotalFit, "Background:" + BckFit, "Signal:" + signalFit,
                 "Mean:" + df.format(1000D * Pars[1]) + "\u00B1" + df.format(Errors[1] * 1000.),
                 "\u03c3:" + df.format(1000D * Pars[2]) + "\u00B1" + df.format(Errors[2] * 1000.)};
-      //  c1.setLegendPos(0,500);
+        //  c1.setLegendPos(0,500);
         c1.setTicsMirror(false);
+
         c1.drawTextBox(parsData);
 
+        c1.refreshFrame();
         total = "Total:" + TotalFit;
         backgroundFit = " Background:" + BckFit;
         signal = " Signal:" + signalFit;
